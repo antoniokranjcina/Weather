@@ -3,6 +3,7 @@ import org.gradle.api.JavaVersion
 object ProjectConfig {
 
     const val nameSpaceApp = "com.antoniok.weather"
+    const val nameSpaceCoreDataSourceRemote = "$nameSpaceApp.core.data_source.remote"
 
     const val compileSdk = 33
     const val minSdk = 29

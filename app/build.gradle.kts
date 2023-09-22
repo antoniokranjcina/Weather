@@ -1,5 +1,5 @@
 plugins {
-    id(GradlePlugins.android)
+    id(GradlePlugins.androidApplication)
     id(GradlePlugins.androidKotlin)
 }
 
@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation(project(Module.coreDataSourceRemote))
+
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)
 
@@ -65,5 +67,8 @@ dependencies {
     debugImplementation(Compose.uiTestManif)
 
     implementation(Koin.koinAndroid)
+    implementation(Compose.koinAndroidCompose)
+
     implementation(Compose.navigationCompose)
+
 }

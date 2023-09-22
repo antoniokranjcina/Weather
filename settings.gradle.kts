@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Weather"
 include(":app")
+include(":core:data-source:remote")
