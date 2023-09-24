@@ -1,6 +1,7 @@
 plugins {
     id(GradlePlugins.androidLibrary)
     id(GradlePlugins.androidKotlin)
+    id(GradlePlugins.kotlinKapt)
 }
 
 android {
@@ -24,7 +25,8 @@ dependencies {
     implementation(Koin.koinAndroid)
 
     implementation(Room.room)
-    annotationProcessor(Room.roomCompiler)
+    kapt(Room.roomCompiler)
+    implementation(Room.roomKtx)
 
     testImplementation(UnitTesting.junit4)
     testImplementation(UnitTesting.truth)

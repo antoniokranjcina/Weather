@@ -20,7 +20,7 @@ import com.antoniok.core.data_source.local.entity.WeatherMetricsEntity
         HourInfoEntity::class,
         WeatherMetricsEntity::class
     ],
-    version = 0,
+    version = 1,
     exportSchema = false
 )
 internal abstract class WeatherDatabase : RoomDatabase() {
