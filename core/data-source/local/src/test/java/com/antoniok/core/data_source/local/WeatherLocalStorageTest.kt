@@ -259,7 +259,7 @@ class WeatherLocalStorageTest {
         private val weatherMetricsEntity = WeatherMetricsEntity(
             id = 1,
             uvIndex = "Clear",
-            moisture = "20%",
+            humidity = "20%",
             wind = "5 m/s",
             sunrise = "06:00 AM",
             sunset = "07:00 PM"

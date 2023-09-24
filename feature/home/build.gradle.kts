@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation(project(Module.coreUi))
+    implementation(project(Module.coreModel))
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)

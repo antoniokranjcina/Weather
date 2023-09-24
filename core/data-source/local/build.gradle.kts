@@ -22,6 +22,8 @@ android {
 }
 
 dependencies {
+    implementation(project(Module.coreModel))
+
     implementation(Koin.koinAndroid)
 
     implementation(Room.room)

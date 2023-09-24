@@ -9,8 +9,8 @@ data class WeatherMetricsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val uvIndex: String,
-    val moisture: String,
-    val wind: String,
+    val humidity: Double,
+    val wind: Double,
     val sunrise: String,
     val sunset: String
 )

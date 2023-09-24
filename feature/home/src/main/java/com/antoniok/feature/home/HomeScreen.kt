@@ -10,19 +10,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.antoniok.core.model.CurrentWeather
+import com.antoniok.core.model.DailyWeatherForecast
+import com.antoniok.core.model.HourInfo
+import com.antoniok.core.model.WeatherMetrics
+import com.antoniok.core.model.dummyCurrentWeather
+import com.antoniok.core.model.dummyDailyWeatherForecasts
+import com.antoniok.core.model.dummyHourInfoList
+import com.antoniok.core.model.dummyWeatherMetrics
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.feature.home.component.CurrentWeatherInfo
 import com.antoniok.feature.home.component.daily.DailyWeather
 import com.antoniok.feature.home.component.grid.WeatherInfoGrid
 import com.antoniok.feature.home.component.weekly.WeeklyWeather
-import com.antoniok.feature.home.data.CurrentWeather
-import com.antoniok.feature.home.data.DailyWeatherForecast
-import com.antoniok.feature.home.data.HourInfo
-import com.antoniok.feature.home.data.WeatherMetrics
-import com.antoniok.feature.home.data.dummyCurrentWeather
-import com.antoniok.feature.home.data.dummyDailyWeatherForecasts
-import com.antoniok.feature.home.data.dummyHourInfoList
-import com.antoniok.feature.home.data.dummyWeatherMetrics
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -61,7 +61,7 @@ private fun HomeScreenContent(
             temp = currentWeather.realTemp,
             description = currentWeather.description,
             descriptionImage = currentWeather.descriptionImage,
-            city = currentWeather.city,
+            city = "Zagreb", // TODO hardcoded
             feelsLikeTemp = currentWeather.feelsLikeTemp
         )
         Spacer(modifier = Modifier.size(Spacing.xl))

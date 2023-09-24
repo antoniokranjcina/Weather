@@ -4,10 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.antoniok.feature.home.data.dummyConditionForecast
-import com.antoniok.feature.home.data.dummyCurrentWeather
-import com.antoniok.feature.home.data.dummyDailyWeatherForecasts
-import com.antoniok.feature.home.data.dummyWeatherMetrics
+import com.antoniok.core.model.dummyConditionForecast
+import com.antoniok.core.model.dummyCurrentWeather
+import com.antoniok.core.model.dummyDailyWeatherForecasts
+import com.antoniok.core.model.dummyWeatherMetrics
 
 class HomeViewModel : ViewModel() {
 
