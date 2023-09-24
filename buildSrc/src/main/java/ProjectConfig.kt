@@ -4,6 +4,7 @@ object ProjectConfig {
 
     const val nameSpaceApp = "com.antoniok.weather"
     const val nameSpaceCoreDataSourceRemote = "$nameSpaceApp.core.data_source.remote"
+    const val nameSpaceCoreDataSourceLocal = "$nameSpaceApp.core.data_source.local"
     const val nameSpaceCoreUi = "$nameSpaceApp.core.ui"
 
     const val nameSpaceFeatureHome = "$nameSpaceApp.feature.home"
@@ -14,7 +15,7 @@ object ProjectConfig {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    val java = JavaVersion.VERSION_11
-    const val targetJDK = "11"
+    val java = JavaVersion.VERSION_17
+    const val targetJDK = "17"
 
 }

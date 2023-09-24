@@ -6,4 +6,6 @@ object GradlePlugins {
 
     const val androidKotlin = "org.jetbrains.kotlin.android"
 
+    const val kotlinKapt = "kotlin-kapt"
+
 }
