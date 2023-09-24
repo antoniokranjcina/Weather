@@ -26,4 +26,10 @@ dependencies {
 
     implementation(AndroidX.coreKtx)
     implementation(Koin.koinAndroid)
+
+    testImplementation(UnitTesting.junit4)
+    testImplementation(UnitTesting.truth)
+    testImplementation(UnitTesting.coroutinesTest)
+    testImplementation(UnitTesting.mociktoInline)
+    testImplementation(UnitTesting.mockitoCore)
 }
