@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="feels_like">Feels like %d°</string>
+    <string name="min_temperature">%s. Lowest temperature %d°C</string>
+
+    <string name="uv_index">UV index</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+
+</resources>

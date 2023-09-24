@@ -4,6 +4,9 @@ object ProjectConfig {
 
     const val nameSpaceApp = "com.antoniok.weather"
     const val nameSpaceCoreDataSourceRemote = "$nameSpaceApp.core.data_source.remote"
+    const val nameSpaceCoreUi = "$nameSpaceApp.core.ui"
+
+    const val nameSpaceFeatureHome = "$nameSpaceApp.feature.home"
 
     const val compileSdk = 33
     const val minSdk = 29

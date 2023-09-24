@@ -1,11 +1,12 @@
 package com.antoniok.weather.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.antoniok.feature.home.HomeScreen
+import com.antoniok.weather.ui.Route
 
 @Composable
 fun RootNavHost(
@@ -15,10 +16,10 @@ fun RootNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = "welcome"
+        startDestination = Route.HOME
     ) {
-        composable("welcome") {
-            Text(text = "Hello World")
+        composable(Route.HOME) {
+            HomeScreen()
         }
     }
 }
