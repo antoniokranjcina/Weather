@@ -10,13 +10,21 @@ import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 
 class RetrofitWeatherNetworkTest {
 
-    private val weatherDataSource = mock(WeatherNetworkDataSource::class.java)
+    @Mock
+    private lateinit var weatherDataSource: WeatherNetworkDataSource
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.openMocks(this)
+    }
 
     @Test
     fun `GIVEN a valid city WHEN getLocation is called THEN it returns the location`() =

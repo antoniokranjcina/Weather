@@ -58,11 +58,11 @@ private fun HomeScreenContent(
             .padding(Spacing.m)
     ) {
         CurrentWeatherInfo(
-            temp = currentWeather.degrees,
+            temp = currentWeather.realTemp,
             description = currentWeather.description,
             descriptionImage = currentWeather.descriptionImage,
             city = currentWeather.city,
-            feelsLikeTemp = currentWeather.feelsLike
+            feelsLikeTemp = currentWeather.feelsLikeTemp
         )
         Spacer(modifier = Modifier.size(Spacing.xl))
         DailyWeather(
