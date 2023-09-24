@@ -8,7 +8,7 @@ import com.antoniok.core.data_source.local.util.Table
 data class DailyWeatherForecastEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val day: String,
+    val day: Int,
     val chanceOfRain: Int,
     val minConditionImage: String,
     val maxConditionImage: String,

@@ -1,6 +1,7 @@
 package com.antoniok.weather
 
 import android.app.Application
+import com.antoniok.core.data.di.dataModule
 import com.antoniok.core.data_source.local.di.localModule
 import com.antoniok.feature.home.di.homeModule
 import com.antoniok.weather.data_source.remote.di.networkModule
@@ -11,6 +12,7 @@ import org.koin.core.context.startKoin
 private val modules = listOf(
     networkModule,
     localModule,
+    dataModule,
     homeModule
 )
 

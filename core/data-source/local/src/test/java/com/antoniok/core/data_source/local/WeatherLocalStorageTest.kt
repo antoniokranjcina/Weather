@@ -242,13 +242,12 @@ class WeatherLocalStorageTest {
             realTemperature = 1,
             description = "Sunny",
             descriptionImage = "",
-            city = "",
             feelsLikeTemperature = 10
         )
 
         private val dailyWeatherForecastEntity = DailyWeatherForecastEntity(
             id = 1,
-            day = "Sunny",
+            day = 1,
             chanceOfRain = 25,
             minConditionImage = "",
             maxConditionImage = "",
@@ -259,8 +258,8 @@ class WeatherLocalStorageTest {
         private val weatherMetricsEntity = WeatherMetricsEntity(
             id = 1,
             uvIndex = "Clear",
-            moisture = "20%",
-            wind = "5 m/s",
+            humidity = 20.8,
+            wind = 5.2,
             sunrise = "06:00 AM",
             sunset = "07:00 PM"
         )

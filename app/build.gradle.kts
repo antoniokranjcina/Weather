@@ -53,6 +53,9 @@ dependencies {
 
     implementation(project(Module.coreDataSourceRemote))
     implementation(project(Module.coreDataSourceLocal))
+    implementation(project(Module.coreModel))
+    implementation(project(Module.coreData))
+
     implementation(project(Module.featureHome))
 
     implementation(AndroidX.coreKtx)

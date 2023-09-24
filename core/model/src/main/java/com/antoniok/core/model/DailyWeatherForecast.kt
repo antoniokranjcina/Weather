@@ -1,7 +1,7 @@
-package com.antoniok.feature.home.data
+package com.antoniok.core.model
 
 data class DailyWeatherForecast(
-    val day: String,
+    val day: Int,
     val chanceOfRain: Int,
     val minConditionImage: String,
     val maxConditionImage: String,
@@ -9,9 +9,9 @@ data class DailyWeatherForecast(
     val maxTemp: Int
 )
 
-val dummyDailyWeatherForecasts = (1 until 7).map { day ->
+val dummyDailyWeatherForecasts = (1 until 7).map {
     DailyWeatherForecast(
-        day = "Monday",
+        day = it,
         chanceOfRain = 75,
         minConditionImage = "",
         maxConditionImage = "",

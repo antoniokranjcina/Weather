@@ -6,6 +6,7 @@ object ProjectConfig {
     const val nameSpaceCoreDataSourceRemote = "$nameSpaceApp.core.data_source.remote"
     const val nameSpaceCoreDataSourceLocal = "$nameSpaceApp.core.data_source.local"
     const val nameSpaceCoreUi = "$nameSpaceApp.core.ui"
+    const val nameSpaceCoreData = "$nameSpaceApp.core.data"
 
     const val nameSpaceFeatureHome = "$nameSpaceApp.feature.home"
 

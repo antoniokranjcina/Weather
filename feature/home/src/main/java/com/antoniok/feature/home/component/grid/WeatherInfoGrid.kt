@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.antoniok.core.model.WeatherMetrics
+import com.antoniok.core.model.dummyWeatherMetrics
 import com.antoniok.core.ui.icon.WeatherIcon
 import com.antoniok.core.ui.spacing.Spacing
-import com.antoniok.feature.home.data.WeatherMetrics
-import com.antoniok.feature.home.data.dummyWeatherMetrics
 import com.antoniok.weather.feature.home.R
 
 @Composable
@@ -36,7 +36,7 @@ fun WeatherInfoGrid(
             WeatherCard(
                 image = WeatherIcon.Humidity,
                 title = R.string.humidity,
-                data = "${weatherMetrics.moisture}%"
+                data = "${weatherMetrics.humidity}%"
             )
         }
         Spacer(modifier = Modifier.size(Spacing.s))

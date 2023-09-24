@@ -10,6 +10,5 @@ data class CurrentWeatherEntity(
     val realTemperature: Int,
     val description: String,
     val descriptionImage: String,
-    val city: String,
     val feelsLikeTemperature: Int
 )

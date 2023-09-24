@@ -8,4 +8,6 @@ object GradlePlugins {
 
     const val kotlinKapt = "kotlin-kapt"
 
+    const val orgJetbrainsJvm = "org.jetbrains.kotlin.jvm"
+
 }

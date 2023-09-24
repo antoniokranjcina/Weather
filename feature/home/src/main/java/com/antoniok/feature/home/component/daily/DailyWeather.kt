@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.antoniok.core.model.HourInfo
+import com.antoniok.core.model.dummyHourInfoList
 import com.antoniok.core.ui.spacing.Spacing
-import com.antoniok.feature.home.data.HourInfo
-import com.antoniok.feature.home.data.dummyHourInfoList
 import com.antoniok.weather.feature.home.R
 import java.util.Calendar
 
