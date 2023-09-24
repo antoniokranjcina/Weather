@@ -1,23 +1,14 @@
 plugins {
-    id(GradlePlugins.androidApplication)
+    id(GradlePlugins.androidLibrary)
     id(GradlePlugins.androidKotlin)
 }
 
 android {
-    namespace = ProjectConfig.nameSpaceApp
+    namespace = ProjectConfig.nameSpaceFeatureHome
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = ProjectConfig.nameSpaceApp
         minSdk = ProjectConfig.minSdk
-        targetSdk = ProjectConfig.targetSdk
-        versionCode = ProjectConfig.versionCode
-        versionName = ProjectConfig.versionName
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -42,17 +33,11 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Compose.composeCompilerVersion
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
 
-    implementation(project(Module.coreDataSourceRemote))
-    implementation(project(Module.featureHome))
+    implementation(project(Module.coreUi))
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)
@@ -71,5 +56,7 @@ dependencies {
     implementation(Compose.koinAndroidCompose)
 
     implementation(Compose.navigationCompose)
+
+    implementation(Coil.coilCompose)
 
 }
