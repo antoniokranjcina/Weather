@@ -7,9 +7,9 @@ import com.antoniok.core.model.WeatherMetrics
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface defining methods to retrieve weather-related data using Flow-based asynchronous programming.
- * Implementations of this interface should provide functionality to fetch various weather forecasts
- * and metrics.
+ * Interface defining methods to retrieve weather-related data using Flow-based asynchronous
+ * programming. Implementations of this interface should provide functionality to fetch various
+ * weather forecasts and metrics.
  */
 interface WeatherRepository {
 
