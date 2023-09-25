@@ -19,6 +19,7 @@ data class DayEntity(
 )
 
 fun DayEntity.asExternalModule() = Day(
+    day = -1,
     maxTempC = maxTempC,
     maxTempF = maxTempF,
     minTempC = minTempC,

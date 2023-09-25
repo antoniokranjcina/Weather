@@ -25,7 +25,7 @@ data class DayDto(
     @SerializedName("daily_will_it_snow") val dailyWillItSnow: Int,
     @SerializedName("daily_chance_of_snow") val dailyChanceOfSnow: Int,
     @SerializedName("condition") val condition: ConditionDto,
-    @SerializedName("uv") val uv: Int,
+    @SerializedName("uv") val uv: Double,
     @SerializedName("air_quality") val airQuality: AirQualityDto
 )
 
@@ -36,5 +36,5 @@ fun DayDto.asEntity() = DayEntity(
     minTempF = minTempF,
     conditionText = condition.text,
     conditionIcon = condition.icon.substring(2),
-    conditionCode = condition.code,
+    conditionCode = condition.code
 )

@@ -24,7 +24,7 @@ class HomeViewModel(
 ) : ViewModel() {
 
     val uiState: StateFlow<WeatherUiState> =
-        weatherRepository.getWeatherByCity("New York")
+        weatherRepository.getWeatherByCity("Zagreb")
             .map { weather ->
                 weather?.let { WeatherUiState.Success(it) } ?: WeatherUiState.Empty
             }
@@ -40,8 +40,8 @@ class HomeViewModel(
     init {
         viewModelScope.launch {
             isSyncSuccess = weatherRepository.sync(
-                city = "New York",
-                days = 1
+                city = "Zagreb",
+                days = 7
             )
         }
     }

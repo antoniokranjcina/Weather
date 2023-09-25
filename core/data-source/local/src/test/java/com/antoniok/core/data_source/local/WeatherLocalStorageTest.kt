@@ -2,9 +2,12 @@ package com.antoniok.core.data_source.local
 
 import com.antoniok.core.data_source.local.dao.WeatherDao
 import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
 import com.antoniok.core.data_source.local.entity.current.CurrentEntity
 import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
 import com.antoniok.core.data_source.local.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.entity.forecast.HourEntity
 import com.antoniok.core.data_source.local.entity.location.LocationEntity
 import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
 import kotlinx.coroutines.flow.flowOf
@@ -40,21 +43,35 @@ class WeatherLocalStorageTest {
         }
 
     @Test
+    fun `GIVEN a hour entities WHEN insertHours is called THEN it should insert the hours`() =
+        runBlocking {
+            weatherLocalStorage.insertHours(hourEntities)
+            verify(weatherDao).insertHours(hourEntities)
+        }
+
+    @Test
+    fun `GIVEN a forecast day entities WHEN insertForecastDays is called THEN it should insert the forecastDay`() =
+        runBlocking {
+            weatherLocalStorage.insertForecastDays(forecastDayEntities)
+            verify(weatherDao).insertForecastDays(forecastDayEntities)
+        }
+
+    @Test
     fun `GIVEN a city WHEN getWeatherByCity is called THEN it should return the weather for that city`() =
         runBlocking {
             val city = "Zagreb"
-            `when`(weatherDao.getWeatherByCity(city)).thenReturn(flowOf(weatherEntity1))
+            `when`(weatherDao.getWeatherByCity(city)).thenReturn(flowOf(weatherWithDaysAndHours1))
 
             val weather = weatherLocalStorage.getWeatherByCity(city)
 
             assertNotNull(weather)
-            assertEquals(weatherEntity1, weather.single())
+            assertEquals(weatherWithDaysAndHours1, weather.single())
         }
 
     @Test
     fun `GIVEN weather entities WHEN weathers is called THEN it should return a list of weather entities`() =
         runBlocking {
-            val weatherEntities = listOf(weatherEntity1, weatherEntity2)
+            val weatherEntities = listOf(weatherWithDaysAndHours1, weatherWithDaysAndHours2)
             `when`(weatherDao.getAllWeathers()).thenReturn(flowOf(weatherEntities))
 
             val weathers = weatherLocalStorage.weathers.single()
@@ -129,7 +146,7 @@ class WeatherLocalStorageTest {
             moonset = "05:12",
         )
 
-        val weatherEntity1 = WeatherEntity(
+        private val weatherEntity1 = WeatherEntity(
             id = "Zagreb",
             location = locationEntity,
             current = currentEntity,
@@ -137,13 +154,59 @@ class WeatherLocalStorageTest {
             astro = astroEntity
         )
 
-        val weatherEntity2 = WeatherEntity(
+        private val weatherEntity2 = WeatherEntity(
             id = "New York",
             location = locationEntity,
             current = currentEntity,
             day = dayEntity,
             astro = astroEntity
         )
+
+        val weatherWithDaysAndHours1 = WeatherWithDaysAndHours(
+            weather = weatherEntity1,
+            hours = emptyList(),
+            forecastDays = emptyList()
+        )
+
+        val weatherWithDaysAndHours2 = WeatherWithDaysAndHours(
+            weather = weatherEntity2,
+            hours = emptyList(),
+            forecastDays = emptyList()
+        )
+
+        val hourEntities = listOf(
+            HourEntity(
+                hourId = "",
+                id = "",
+                hour = 1,
+                feelsLikeC = 20.1,
+                tempC = 23.1,
+                chanceOfRain = 80,
+                conditionText = "rainy",
+                conditionIcon = "www.image.com",
+                conditionCode = 1230,
+            )
+        )
+
+        val forecastDayEntities = listOf(
+            ForecastDayEntity(
+                forecastDayId = "",
+                id = "",
+                day = 2,
+                chanceOfRain = 82,
+                maxTempC = 12.2,
+                maxTempF = 32.1,
+                minTempC = 32.1,
+                minTempF = 12.2,
+                minConditionText = "Rainy",
+                minConditionIcon = "www.image.com",
+                minConditionCode = 100,
+                maxConditionText = "Sun",
+                maxConditionIcon = "www.image.com",
+                maxConditionCode = 1200,
+            )
+        )
+
     }
 
 }

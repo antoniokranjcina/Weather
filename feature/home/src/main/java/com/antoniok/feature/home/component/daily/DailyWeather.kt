@@ -21,7 +21,7 @@ fun DailyWeather(
     modifier: Modifier = Modifier,
     condition: String,
     minTemp: Int,
-    hourInfo: List<Hour>
+    hours: List<Hour>
 ) {
     Card(modifier = modifier) {
         Column {
@@ -34,10 +34,10 @@ fun DailyWeather(
             ) {
                 // Find the index of the current hour in the dailyInfo list
                 val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-                val initialItemIndex = hourInfo.indexOfFirst { it.hour == currentHour }
+                val initialItemIndex = hours.indexOfFirst { it.hour == currentHour }
 
                 // Rotate the dailyInfo list to start with the current hour's item
-                val rotated = hourInfo.drop(initialItemIndex) + hourInfo.take(initialItemIndex)
+                val rotated = hours.drop(initialItemIndex) + hours.take(initialItemIndex)
                 items(rotated) {
                     HourItem(
                         hour = it.hour,
@@ -57,6 +57,6 @@ private fun WholeDayPreview() {
     DailyWeather(
         condition = "Rainy",
         minTemp = 22,
-        hourInfo = dummyHours
+        hours = dummyHours
     )
 }

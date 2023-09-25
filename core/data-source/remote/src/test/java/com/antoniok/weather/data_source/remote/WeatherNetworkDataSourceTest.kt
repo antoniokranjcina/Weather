@@ -95,7 +95,7 @@ class RetrofitWeatherNetworkTest {
             dailyWillItSnow = 0,
             dailyChanceOfSnow = 0,
             condition = conditionDto,
-            uv = 5,
+            uv = 5.0,
             airQuality = airQualityDto
         )
 

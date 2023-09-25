@@ -1,6 +1,9 @@
 package com.antoniok.core.data_source.local
 
 import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.entity.forecast.HourEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,20 +18,24 @@ interface WeatherLocalDataSource {
      */
     suspend fun insertWeather(weather: WeatherEntity)
 
+    suspend fun insertHours(hours: List<HourEntity>)
+
+    suspend fun insertForecastDays(forecastDay: List<ForecastDayEntity>)
+
     /**
      * Retrieves weather data for a specific city from the local storage.
      *
      * @param city The name of the city for which weather data is requested.
      * @return A [Flow] emitting the [WeatherEntity] for the specified city, or null if not found.
      */
-    fun getWeatherByCity(city: String): Flow<WeatherEntity?>
+    fun getWeatherByCity(city: String): Flow<WeatherWithDaysAndHours?>
 
     /**
      * Retrieves a list of all weather entities stored in the local storage.
      *
      * @return A [Flow] emitting a list of [WeatherEntity] objects.
      */
-    val weathers: Flow<List<WeatherEntity>>
+    val weathers: Flow<List<WeatherWithDaysAndHours>>
 
     /**
      * Deletes all weather entities from the local storage.

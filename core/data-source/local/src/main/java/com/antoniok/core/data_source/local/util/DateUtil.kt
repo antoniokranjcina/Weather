@@ -22,6 +22,6 @@ fun Int.getDayOfWeek(): Int {
 
 fun Int.getHour(): Int {
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = this.toLong() * 1000 // Convert seconds to milliseconds
+    calendar.timeInMillis = this.toLong() * 1000
     return calendar.get(Calendar.HOUR_OF_DAY)
 }

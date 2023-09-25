@@ -7,6 +7,7 @@ import com.antoniok.core.data_source.local.entity.WeatherEntity
 import com.antoniok.core.data_source.local.entity.current.CurrentEntity
 import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
 import com.antoniok.core.data_source.local.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
 import com.antoniok.core.data_source.local.entity.forecast.HourEntity
 import com.antoniok.core.data_source.local.entity.location.LocationEntity
 import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
@@ -16,6 +17,7 @@ import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
         CurrentEntity::class,
         AstroEntity::class,
         DayEntity::class,
+        ForecastDayEntity::class,
         HourEntity::class,
         LocationEntity::class,
         ConditionEntity::class,

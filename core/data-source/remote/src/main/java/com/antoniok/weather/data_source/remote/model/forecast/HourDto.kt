@@ -1,5 +1,7 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
+import com.antoniok.core.data_source.local.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.util.getHour
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.google.gson.annotations.SerializedName
@@ -39,4 +41,16 @@ data class HourDto(
     @SerializedName("gust_kph") val gustKph: Double,
     @SerializedName("uv") val uv: Int,
     @SerializedName("air_quality") val airQuality: AirQualityDto
+)
+
+fun HourDto.asEntity(id: String) = HourEntity(
+    hourId = "$id${timeEpoch.getHour()}",
+    id = id,
+    hour = timeEpoch.getHour(),
+    feelsLikeC = feelsLikeC,
+    tempC = tempC,
+    chanceOfRain = chanceOfRain,
+    conditionText = condition.text,
+    conditionIcon = condition.icon,
+    conditionCode = condition.code,
 )

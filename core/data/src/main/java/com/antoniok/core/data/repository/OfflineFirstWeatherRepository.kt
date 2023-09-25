@@ -1,11 +1,12 @@
 package com.antoniok.core.data.repository
 
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
-import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
 import com.antoniok.core.data_source.local.entity.asExternalModule
 import com.antoniok.core.model.Weather
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
 import com.antoniok.weather.data_source.remote.model.asEntity
+import com.antoniok.weather.data_source.remote.model.forecast.asEntity
 import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,12 +18,12 @@ internal class OfflineFirstWeatherRepository(
 
     override fun getWeatherByCity(city: String): Flow<Weather?> =
         localDataSource.getWeatherByCity(city)
-            .map { weatherEntity: WeatherEntity? ->
-                weatherEntity?.asExternalModule()
+            .map { weather ->
+                weather?.asExternalModule()
             }
 
     override val weathers: Flow<List<Weather>>
-        get() = localDataSource.weathers.map { it.map(WeatherEntity::asExternalModule) }
+        get() = localDataSource.weathers.map { it.map(WeatherWithDaysAndHours::asExternalModule) }
 
     override suspend fun sync(city: String, days: Int): Boolean {
         val weather = networkDataSource.getWeather(
@@ -32,6 +33,16 @@ internal class OfflineFirstWeatherRepository(
         return when (weather) {
             is NetworkResource.Success -> {
                 localDataSource.insertWeather(weather.data.asEntity())
+                localDataSource.insertHours(
+                    weather.data.forecast.forecastDay.first().hour.map {
+                        it.asEntity(weather.data.location.name)
+                    }
+                )
+                localDataSource.insertForecastDays(
+                    weather.data.forecast.forecastDay.map {
+                        it.asEntity(weather.data.location.name)
+                    }
+                )
                 true
             }
 

@@ -55,7 +55,7 @@ class WeatherRepositoryTest {
             val weatherEntities = listOf(weatherEntity1, weatherEntity2)
             `when`(localDataSource.weathers).thenReturn(flowOf(weatherEntities))
 
-            val weathers = repository.getWeathers().single()
+            val weathers = repository.weathers.single()
 
             assertFalse(weathers.isEmpty())
             assertEquals(weatherEntities.map { it.asExternalModule() }, weathers)
