@@ -14,21 +14,25 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
+import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 
 class OfflineFirstWeatherRepositoryTest {
 
+    @Mock
     private lateinit var localDataSource: WeatherLocalDataSource
+
+    @Mock
     private lateinit var networkDataSource: WeatherNetworkDataSource
+
     private lateinit var repository: OfflineFirstWeatherRepository
 
     @Before
     fun setUp() {
-        localDataSource = mock(WeatherLocalDataSource::class.java)
-        networkDataSource = mock(WeatherNetworkDataSource::class.java)
+        MockitoAnnotations.openMocks(this)
         repository = OfflineFirstWeatherRepository(localDataSource, networkDataSource)
     }
 
