@@ -2,6 +2,7 @@ package com.antoniok.core.data.repository
 
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
 import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
 import com.antoniok.core.data_source.local.entity.asExternalModule
 import com.antoniok.core.data_source.local.entity.current.CurrentEntity
 import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
@@ -41,18 +42,19 @@ class WeatherRepositoryTest {
     fun `GIVEN a city WHEN getWeatherByCity is called THEN it returns weather from local data source`() =
         runBlocking {
             val city = "Zagreb"
-            `when`(localDataSource.getWeatherByCity(city)).thenReturn(flowOf(weatherEntity1))
+            `when`(localDataSource.getWeatherByCity(city))
+                .thenReturn(flowOf(weatherWithDaysAndHours1))
 
             val weather = repository.getWeatherByCity(city).single()
 
             assertNotNull(weather)
-            assertEquals(weatherEntity1.asExternalModule(), weather)
+            assertEquals(weatherWithDaysAndHours1.asExternalModule(), weather)
         }
 
     @Test
     fun `GIVEN a list of weather entities WHEN getWeathers is called THEN it returns a list of weather from local data source`() =
         runBlocking {
-            val weatherEntities = listOf(weatherEntity1, weatherEntity2)
+            val weatherEntities = listOf(weatherWithDaysAndHours1, weatherWithDaysAndHours2)
             `when`(localDataSource.weathers).thenReturn(flowOf(weatherEntities))
 
             val weathers = repository.weathers.single()
@@ -125,6 +127,18 @@ class WeatherRepositoryTest {
             current = currentEntity,
             day = dayEntity,
             astro = astroEntity
+        )
+
+        val weatherWithDaysAndHours1 = WeatherWithDaysAndHours(
+            weather = weatherEntity1,
+            hours = emptyList(),
+            forecastDays = emptyList()
+        )
+
+        val weatherWithDaysAndHours2 = WeatherWithDaysAndHours(
+            weather = weatherEntity2,
+            hours = emptyList(),
+            forecastDays = emptyList()
         )
     }
 
