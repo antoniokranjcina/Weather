@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.antoniok.core.data_source.local.WeatherDatabase
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
 import com.antoniok.core.data_source.local.WeatherLocalStorage
-import com.antoniok.core.data_source.local.dao.ConditionForecastDao
-import com.antoniok.core.data_source.local.dao.CurrentWeatherDao
-import com.antoniok.core.data_source.local.dao.DailyWeatherForecastDao
-import com.antoniok.core.data_source.local.dao.WeatherMetricsDao
+import com.antoniok.core.data_source.local.dao.WeatherDao
 import com.antoniok.core.data_source.local.util.Table
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -16,12 +13,9 @@ import org.koin.dsl.module
 val localModule = module {
     single { provideDatabase(androidContext()) }
 
-    single { provideConditionForecastDao(get()) }
-    single { provideCurrentWeatherDao(get()) }
-    single { provideDailyWeatherDao(get()) }
-    single { provideWeatherMetricsDao(get()) }
+    single { provideWeatherDao(get()) }
 
-    single { provideWeatherLocalDataSource(get(), get(), get(), get()) }
+    single { provideWeatherLocalDataSource(get()) }
 }
 
 private fun provideDatabase(context: Context): WeatherDatabase = Room
@@ -32,19 +26,10 @@ private fun provideDatabase(context: Context): WeatherDatabase = Room
     )
     .build()
 
-private fun provideConditionForecastDao(db: WeatherDatabase) = db.conditionForecastDao
-private fun provideCurrentWeatherDao(db: WeatherDatabase) = db.currentWeatherDao
-private fun provideDailyWeatherDao(db: WeatherDatabase) = db.dailyWeatherForecastDao
-private fun provideWeatherMetricsDao(db: WeatherDatabase) = db.weatherMetricsDao
+private fun provideWeatherDao(db: WeatherDatabase) = db.weatherDao
 
 private fun provideWeatherLocalDataSource(
-    conditionForecastDao: ConditionForecastDao,
-    currentWeatherDao: CurrentWeatherDao,
-    dailyWeatherForecastDao: DailyWeatherForecastDao,
-    weatherMetricsDao: WeatherMetricsDao,
+    weatherDao: WeatherDao,
 ): WeatherLocalDataSource = WeatherLocalStorage(
-    conditionForecastDao = conditionForecastDao,
-    currentWeatherDao = currentWeatherDao,
-    dailyWeatherForecastDao = dailyWeatherForecastDao,
-    weatherMetricsDao = weatherMetricsDao,
+    weatherDao = weatherDao
 )

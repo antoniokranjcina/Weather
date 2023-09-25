@@ -6,14 +6,14 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.antoniok.core.model.DailyWeatherForecast
-import com.antoniok.core.model.dummyDailyWeatherForecasts
+import com.antoniok.core.model.ForecastDay
+import com.antoniok.core.model.dummyDays
 import com.antoniok.core.ui.spacing.Spacing
 
 @Composable
 fun WeeklyWeather(
     modifier: Modifier = Modifier,
-    days: List<DailyWeatherForecast>
+    days: List<ForecastDay>
 ) {
     Card(modifier = modifier) {
         Column(
@@ -22,11 +22,11 @@ fun WeeklyWeather(
             days.forEach {
                 DailyItem(
                     day = it.day.toString(), // TODO
-                    chanceOfRain = it.chanceOfRain,
-                    minConditionImage = it.minConditionImage,
-                    maxConditionImage = it.maxConditionImage,
-                    minTemp = it.minTemp,
-                    maxTemp = it.maxTemp
+                    chanceOfRain = it.chanceOfRain.toInt(),
+                    minConditionImage = it.minCondition.icon,
+                    maxConditionImage = it.maxCondition.icon,
+                    minTemp = it.minTempC.toInt(),
+                    maxTemp = it.maxTempC.toInt()
                 )
             }
         }
@@ -36,7 +36,5 @@ fun WeeklyWeather(
 @Preview
 @Composable
 private fun WeeklyWeatherPreview() {
-    WeeklyWeather(
-        days = dummyDailyWeatherForecasts
-    )
+    WeeklyWeather(days = dummyDays)
 }

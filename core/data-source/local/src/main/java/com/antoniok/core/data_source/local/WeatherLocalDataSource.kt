@@ -1,126 +1,52 @@
 package com.antoniok.core.data_source.local
 
-import com.antoniok.core.data_source.local.entity.ConditionForecastEntity
-import com.antoniok.core.data_source.local.entity.ConditionForecastWithHours
-import com.antoniok.core.data_source.local.entity.CurrentWeatherEntity
-import com.antoniok.core.data_source.local.entity.DailyWeatherForecastEntity
-import com.antoniok.core.data_source.local.entity.HourInfoEntity
-import com.antoniok.core.data_source.local.entity.WeatherMetricsEntity
+import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.entity.forecast.HourEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
- * A data source interface for managing local weather data.
+ * A data source interface responsible for managing weather data in a local storage.
  */
 interface WeatherLocalDataSource {
 
     /**
-     * Inserts a [ConditionForecastWithHours] into the local database.
+     * Inserts a weather entity into the local storage.
      *
-     * @param condition The [ConditionForecastWithHours] to insert.
+     * @param weather The [WeatherEntity] to be inserted.
      */
-    suspend fun insertConditionForecastWithHours(condition: ConditionForecastWithHours)
+    suspend fun insertWeather(weather: WeatherEntity)
+
+    suspend fun insertHours(hours: List<HourEntity>)
+
+    suspend fun insertForecastDays(forecastDay: List<ForecastDayEntity>)
 
     /**
-     * Inserts a [CurrentWeatherEntity] into the local database.
+     * Retrieves weather data for a specific city from the local storage.
      *
-     * @param weather The [CurrentWeatherEntity] to insert.
+     * @param city The name of the city for which weather data is requested.
+     * @return A [Flow] emitting the [WeatherEntity] for the specified city, or null if not found.
      */
-    suspend fun insertCurrentWeather(weather: CurrentWeatherEntity)
+    fun getWeatherByCity(city: String): Flow<WeatherWithDaysAndHours?>
 
     /**
-     * Inserts a [DailyWeatherForecastEntity] into the local database.
+     * Retrieves a list of all weather entities stored in the local storage.
      *
-     * @param dailyWeather The [DailyWeatherForecastEntity] to insert.
+     * @return A [Flow] emitting a list of [WeatherEntity] objects.
      */
-    suspend fun insertDailyWeatherForecast(dailyWeather: DailyWeatherForecastEntity)
+    val weathers: Flow<List<WeatherWithDaysAndHours>>
 
     /**
-     * Inserts a [WeatherMetricsEntity] into the local database.
+     * Deletes all weather entities from the local storage.
+     */
+    suspend fun deleteAllWeathers()
+
+    /**
+     * Deletes a specific weather entity from the local storage.
      *
-     * @param weatherMetrics The [WeatherMetricsEntity] to insert.
+     * @param weather The [WeatherEntity] to be deleted.
      */
-    suspend fun insertWeatherMetrics(weatherMetrics: WeatherMetricsEntity)
+    suspend fun deleteWeather(weather: WeatherEntity)
 
-    /**
-     * Retrieves a [Flow] of [ConditionForecastWithHours] from the local database.
-     */
-    val conditionForecastWithHours: Flow<ConditionForecastWithHours>
-
-    /**
-     * Retrieves a [Flow] of [CurrentWeatherEntity] from the local database.
-     */
-    val currentWeather: Flow<CurrentWeatherEntity>
-
-    /**
-     * Retrieves a [Flow] of [DailyWeatherForecastEntity] from the local database.
-     */
-    val dailyWeatherForecast: Flow<DailyWeatherForecastEntity>
-
-    /**
-     * Retrieves a [Flow] of [WeatherMetricsEntity] from the local database.
-     */
-    val weatherMetrics: Flow<WeatherMetricsEntity>
-
-    /**
-     * Updates an existing [ConditionForecastWithHours] in the local database.
-     *
-     * @param conditionForecastWithHours The updated [ConditionForecastWithHours].
-     */
-    suspend fun updateConditionForecast(conditionForecastWithHours: ConditionForecastWithHours)
-
-    /**
-     * Updates an existing [CurrentWeatherEntity] in the local database.
-     *
-     * @param currentWeather The updated [CurrentWeatherEntity].
-     */
-    suspend fun updateCurrentWeather(currentWeather: CurrentWeatherEntity)
-
-    /**
-     * Updates an existing [DailyWeatherForecastEntity] in the local database.
-     *
-     * @param dailyWeather The updated [DailyWeatherForecastEntity].
-     */
-    suspend fun updateDailyWeatherForecast(dailyWeather: DailyWeatherForecastEntity)
-
-    /**
-     * Updates an existing [WeatherMetricsEntity] in the local database.
-     *
-     * @param weatherMetrics The updated [WeatherMetricsEntity].
-     */
-    suspend fun updateWeatherMetrics(weatherMetrics: WeatherMetricsEntity)
-
-    /**
-     * Deletes a [ConditionForecastEntity] from the local database.
-     *
-     * @param conditionForecast The [ConditionForecastEntity] to delete.
-     */
-    suspend fun deleteConditionForecast(conditionForecast: ConditionForecastEntity)
-
-    /**
-     * Deletes a [HourInfoEntity] from the local database.
-     *
-     * @param hoursInfo The [HourInfoEntity] to delete.
-     */
-    suspend fun deleteHour(hoursInfo: HourInfoEntity)
-
-    /**
-     * Deletes the current weather data from the local database.
-     *
-     * @param currentWeather The [CurrentWeatherEntity] to delete.
-     */
-    suspend fun deleteCurrentWeather(currentWeather: CurrentWeatherEntity)
-
-    /**
-     * Deletes the daily weather forecast data from the local database.
-     *
-     * @param dailyWeather The [DailyWeatherForecastEntity] to delete.
-     */
-    suspend fun deleteDailyWeatherForecast(dailyWeather: DailyWeatherForecastEntity)
-
-    /**
-     * Deletes the weather metrics data from the local database.
-     *
-     * @param weatherMetrics The [WeatherMetricsEntity] to delete.
-     */
-    suspend fun deleteWeatherMetrics(weatherMetrics: WeatherMetricsEntity)
 }

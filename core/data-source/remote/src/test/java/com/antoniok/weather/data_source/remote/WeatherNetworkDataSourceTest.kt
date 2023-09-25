@@ -1,10 +1,13 @@
 package com.antoniok.weather.data_source.remote
 
+import com.antoniok.weather.data_source.remote.model.WeatherDto
 import com.antoniok.weather.data_source.remote.model.alerts.AlertDto
+import com.antoniok.weather.data_source.remote.model.alerts.AlertsDto
 import com.antoniok.weather.data_source.remote.model.current.CurrentDto
 import com.antoniok.weather.data_source.remote.model.forecast.AstroDto
 import com.antoniok.weather.data_source.remote.model.forecast.DayDto
 import com.antoniok.weather.data_source.remote.model.forecast.ForecastDayDto
+import com.antoniok.weather.data_source.remote.model.forecast.ForecastDto
 import com.antoniok.weather.data_source.remote.model.location.LocationDto
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
@@ -27,107 +30,32 @@ class RetrofitWeatherNetworkTest {
     }
 
     @Test
-    fun `GIVEN a valid city WHEN getLocation is called THEN it returns the location`() =
+    fun `GIVEN a valid city WHEN getWeather is called THEN it returns the location`() =
         runBlocking {
             val city = "New York"
-            val dataSourceResponse = NetworkResource.Success(locationDto)
+            val days = 1
+            val dataSourceResponse = NetworkResource.Success(weatherDto)
 
-            `when`(weatherDataSource.getLocation(city)).thenReturn(dataSourceResponse)
-            val result = weatherDataSource.getLocation(city)
+            `when`(weatherDataSource.getWeather(city, days)).thenReturn(dataSourceResponse)
+            val result = weatherDataSource.getWeather(city, days)
 
             assert(result is NetworkResource.Success)
-            assert((result as NetworkResource.Success).data == locationDto)
+            assert((result as NetworkResource.Success).data == weatherDto)
         }
 
     @Test
-    fun `GIVEN an invalid city WHEN getLocation is called THEN it returns an error`() =
+    fun `GIVEN an invalid city WHEN getWeather is called THEN it returns an error`() =
         runBlocking {
             val city = ""
             val exception = Exception("404")
-            val errorResponse = NetworkResource.Error<LocationDto>(exception)
+            val errorResponse = NetworkResource.Error<WeatherDto>(exception)
 
-            `when`(weatherDataSource.getLocation(city)).thenReturn(errorResponse)
-            val result = weatherDataSource.getLocation(city)
+            `when`(weatherDataSource.getWeather(city, 1)).thenReturn(errorResponse)
+            val result = weatherDataSource.getWeather(city, 1)
 
             assert(result is NetworkResource.Error)
             assert((result as NetworkResource.Error).exception.message == "404")
         }
-
-    @Test
-    fun `GIVEN a valid city WHEN getCurrent is called THEN it returns the current`() = runBlocking {
-        val city = "New York"
-        val dataSourceResponse = NetworkResource.Success(currentDto)
-
-        `when`(weatherDataSource.getCurrent(city)).thenReturn(dataSourceResponse)
-        val result = weatherDataSource.getCurrent(city)
-
-        assert(result is NetworkResource.Success)
-        assert((result as NetworkResource.Success).data == currentDto)
-    }
-
-    @Test
-    fun `GIVEN a invalid city WHEN getCurrent is called THEN it returns an error`() = runBlocking {
-        val city = ""
-        val exception = Exception("404")
-        val errorResponse = NetworkResource.Error<CurrentDto>(exception)
-
-        `when`(weatherDataSource.getCurrent(city)).thenReturn(errorResponse)
-        val result = weatherDataSource.getCurrent(city)
-
-        assert(result is NetworkResource.Error)
-        assert((result as NetworkResource.Error).exception.message == "404")
-    }
-
-    @Test
-    fun `GIVEN a valid city WHEN getForecast is called THEN it returns the forecast`() =
-        runBlocking {
-            val city = "New York"
-            val dataSourceResponse = NetworkResource.Success(forecastsDto)
-
-            `when`(weatherDataSource.getForecast(city, days = 1)).thenReturn(dataSourceResponse)
-            val result = weatherDataSource.getForecast(city, days = 1)
-
-            assert(result is NetworkResource.Success)
-            assert((result as NetworkResource.Success).data == forecastsDto)
-        }
-
-    @Test
-    fun `GIVEN a invalid city WHEN getForecast is called THEN it returns an error`() = runBlocking {
-        val city = ""
-        val exception = Exception("404")
-        val errorResponse = NetworkResource.Error<List<ForecastDayDto>>(exception)
-
-        `when`(weatherDataSource.getForecast(city, days = 1)).thenReturn(errorResponse)
-        val result = weatherDataSource.getForecast(city, days = 1)
-
-        assert(result is NetworkResource.Error)
-        assert((result as NetworkResource.Error).exception.message == "404")
-    }
-
-    @Test
-    fun `GIVEN a valid city WHEN getAlert is called THEN it returns the alert`() = runBlocking {
-        val city = "New York"
-        val dataSourceResponse = NetworkResource.Success(alertsDto)
-
-        `when`(weatherDataSource.getAlerts(city)).thenReturn(dataSourceResponse)
-        val result = weatherDataSource.getAlerts(city)
-
-        assert(result is NetworkResource.Success)
-        assert((result as NetworkResource.Success).data == alertsDto)
-    }
-
-    @Test
-    fun `GIVEN a invalid city WHEN getAlert is called THEN it returns an error`() = runBlocking {
-        val city = ""
-        val exception = Exception("404")
-        val errorResponse = NetworkResource.Error<List<AlertDto>>(exception)
-
-        `when`(weatherDataSource.getAlerts(city)).thenReturn(errorResponse)
-        val result = weatherDataSource.getAlerts(city)
-
-        assert(result is NetworkResource.Error)
-        assert((result as NetworkResource.Error).exception.message == "404")
-    }
 
     companion object {
         private val conditionDto = ConditionDto(
@@ -167,7 +95,7 @@ class RetrofitWeatherNetworkTest {
             dailyWillItSnow = 0,
             dailyChanceOfSnow = 0,
             condition = conditionDto,
-            uv = 5,
+            uv = 5.0,
             airQuality = airQualityDto
         )
 
@@ -182,7 +110,7 @@ class RetrofitWeatherNetworkTest {
             isSunUp = 1
         )
 
-        val locationDto = LocationDto(
+        private val locationDto = LocationDto(
             name = "New York City",
             region = "New York",
             country = "United States",
@@ -193,7 +121,7 @@ class RetrofitWeatherNetworkTest {
             localtime = "2023-09-22 11:23 AM"
         )
 
-        val currentDto = CurrentDto(
+        private val currentDto = CurrentDto(
             lastUpdatedEpoch = 1695396213,
             lastUpdated = "2023-09-22 11:23 AM",
             tempC = 28.5,
@@ -212,15 +140,15 @@ class RetrofitWeatherNetworkTest {
             cloud = 20,
             feelsLikeC = 27.0,
             feelsLikeF = 80.6,
-            visKm = 10,
-            visMiles = 6,
+            visKm = 10.2,
+            visMiles = 6.1,
             uv = 5,
             gustMph = 10.2,
             gustKph = 16.5,
             airQuality = airQualityDto
         )
 
-        val forecastsDto = listOf(
+        private val forecastsDto = listOf(
             ForecastDayDto(
                 date = "2023-09-23",
                 dateEpoch = 1695472612,
@@ -230,7 +158,7 @@ class RetrofitWeatherNetworkTest {
             )
         )
 
-        val alertsDto = listOf(
+        private val alertsDto = listOf(
             AlertDto(
                 headline = "Severe Thunderstorm Warning",
                 messageType = "Alert",
@@ -245,6 +173,17 @@ class RetrofitWeatherNetworkTest {
                 expires = "2023-09-22 02:30 PM",
                 desc = "A severe thunderstorm is approaching.",
                 instruction = "Stay indoors and away from windows."
+            )
+        )
+
+        private val weatherDto = WeatherDto(
+            location = locationDto,
+            current = currentDto,
+            forecast = ForecastDto(
+                forecastDay = forecastsDto,
+            ),
+            alerts = AlertsDto(
+                alerts = alertsDto
             )
         )
     }
