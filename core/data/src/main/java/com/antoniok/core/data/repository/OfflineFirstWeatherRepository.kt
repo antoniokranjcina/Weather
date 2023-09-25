@@ -1,16 +1,12 @@
 package com.antoniok.core.data.repository
 
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
-import com.antoniok.core.data_source.local.entity.ConditionForecastWithHours
-import com.antoniok.core.data_source.local.entity.CurrentWeatherEntity
-import com.antoniok.core.data_source.local.entity.DailyWeatherForecastEntity
-import com.antoniok.core.data_source.local.entity.WeatherMetricsEntity
-import com.antoniok.core.data_source.local.mapper.asExternalModel
-import com.antoniok.core.model.ConditionForecast
-import com.antoniok.core.model.CurrentWeather
-import com.antoniok.core.model.DailyWeatherForecast
-import com.antoniok.core.model.WeatherMetrics
+import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.asExternalModule
+import com.antoniok.core.model.Weather
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
+import com.antoniok.weather.data_source.remote.model.asEntity
+import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -19,16 +15,31 @@ internal class OfflineFirstWeatherRepository(
     private val networkDataSource: WeatherNetworkDataSource
 ) : WeatherRepository {
 
-    override fun getConditionForecast(): Flow<ConditionForecast> =
-        localDataSource.conditionForecastWithHours.map(ConditionForecastWithHours::asExternalModel)
+    override fun getWeatherByCity(city: String): Flow<Weather?> =
+        localDataSource.getWeatherByCity(city)
+            .map { weatherEntity: WeatherEntity? ->
+                weatherEntity?.asExternalModule()
+            }
 
-    override fun getCurrentWeather(): Flow<CurrentWeather> =
-        localDataSource.currentWeather.map(CurrentWeatherEntity::asExternalModel)
+    override val weathers: Flow<List<Weather>>
+        get() = localDataSource.weathers.map { it.map(WeatherEntity::asExternalModule) }
 
-    override fun getDailyWeatherForecast(): Flow<DailyWeatherForecast> =
-        localDataSource.dailyWeatherForecast.map(DailyWeatherForecastEntity::asExternalModel)
+    override suspend fun sync(city: String, days: Int): Boolean {
+        val weather = networkDataSource.getWeather(
+            city = city,
+            days = days
+        )
+        return when (weather) {
+            is NetworkResource.Success -> {
+                localDataSource.insertWeather(weather.data.asEntity())
+                true
+            }
 
-    override fun getWeatherMetrics(): Flow<WeatherMetrics> =
-        localDataSource.weatherMetrics.map(WeatherMetricsEntity::asExternalModel)
+            is NetworkResource.Error -> {
+                weather.exception.printStackTrace()
+                false
+            }
+        }
+    }
 
 }

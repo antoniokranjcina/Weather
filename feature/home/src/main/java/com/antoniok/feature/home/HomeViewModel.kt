@@ -4,23 +4,46 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.antoniok.core.model.dummyConditionForecast
-import com.antoniok.core.model.dummyCurrentWeather
-import com.antoniok.core.model.dummyDailyWeatherForecasts
-import com.antoniok.core.model.dummyWeatherMetrics
+import androidx.lifecycle.viewModelScope
+import com.antoniok.core.data.repository.WeatherRepository
+import com.antoniok.core.model.Weather
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+sealed interface WeatherUiState {
+    object Loading : WeatherUiState
+    object Empty : WeatherUiState
+    data class Success(val weather: Weather) : WeatherUiState
+}
 
-    var currentWeather by mutableStateOf(dummyCurrentWeather)
+class HomeViewModel(
+    private val weatherRepository: WeatherRepository
+) : ViewModel() {
+
+    val uiState: StateFlow<WeatherUiState> =
+        weatherRepository.getWeatherByCity("New York")
+            .map { weather ->
+                weather?.let { WeatherUiState.Success(it) } ?: WeatherUiState.Empty
+            }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = WeatherUiState.Loading,
+            )
+
+    var isSyncSuccess by mutableStateOf(false)
         private set
 
-    var conditionForecast by mutableStateOf(dummyConditionForecast)
-        private set
-
-    var weatherMetrics by mutableStateOf(dummyWeatherMetrics)
-        private set
-
-    var dailyWeatherForecasts by mutableStateOf(dummyDailyWeatherForecasts)
-        private set
+    init {
+        viewModelScope.launch {
+            isSyncSuccess = weatherRepository.sync(
+                city = "New York",
+                days = 1
+            )
+        }
+    }
 
 }

@@ -10,16 +10,6 @@ android {
     defaultConfig {
         minSdk = ProjectConfig.minSdk
     }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = ProjectConfig.java
         targetCompatibility = ProjectConfig.java
@@ -39,9 +29,11 @@ dependencies {
 
     implementation(project(Module.coreUi))
     implementation(project(Module.coreModel))
+    implementation(project(Module.coreData))
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)
+    implementation(AndroidX.lifecycleRuntimeCompose)
 
     implementation(platform(Compose.BOM))
     implementation(Compose.ui)

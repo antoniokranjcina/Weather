@@ -8,21 +8,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.antoniok.core.model.CurrentWeather
-import com.antoniok.core.model.DailyWeatherForecast
-import com.antoniok.core.model.HourInfo
-import com.antoniok.core.model.WeatherMetrics
-import com.antoniok.core.model.dummyCurrentWeather
-import com.antoniok.core.model.dummyDailyWeatherForecasts
-import com.antoniok.core.model.dummyHourInfoList
-import com.antoniok.core.model.dummyWeatherMetrics
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.antoniok.core.model.Astro
+import com.antoniok.core.model.Current
+import com.antoniok.core.model.Day
+import com.antoniok.core.model.Location
+import com.antoniok.core.model.dummyAstro
+import com.antoniok.core.model.dummyCurrent
+import com.antoniok.core.model.dummyDay
+import com.antoniok.core.model.dummyLocation
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.feature.home.component.CurrentWeatherInfo
-import com.antoniok.feature.home.component.daily.DailyWeather
 import com.antoniok.feature.home.component.grid.WeatherInfoGrid
-import com.antoniok.feature.home.component.weekly.WeeklyWeather
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -30,26 +30,31 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = getViewModel()
 ) {
-    HomeScreenContent(
-        modifier = modifier,
-        currentWeather = homeViewModel.currentWeather,
-        condition = homeViewModel.conditionForecast.condition,
-        minTemperature = homeViewModel.conditionForecast.minTemperature,
-        hourInfo = homeViewModel.conditionForecast.hours,
-        weatherMetrics = homeViewModel.weatherMetrics,
-        dailyWeatherForecasts = homeViewModel.dailyWeatherForecasts
-    )
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    when (uiState) {
+        is WeatherUiState.Success -> {
+            val data = (uiState as WeatherUiState.Success).weather
+            HomeScreenContent(
+                modifier = modifier,
+                location = data.location,
+                current = data.current,
+                astro = data.astro,
+                day = data.day
+            )
+        }
+        // TODO put spinning wheel
+        WeatherUiState.Empty -> {}
+        WeatherUiState.Loading -> {}
+    }
 }
 
 @Composable
 private fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    currentWeather: CurrentWeather,
-    condition: String,
-    minTemperature: Int,
-    hourInfo: List<HourInfo>,
-    weatherMetrics: WeatherMetrics,
-    dailyWeatherForecasts: List<DailyWeatherForecast>
+    location: Location,
+    current: Current,
+    astro: Astro,
+    day: Day
 ) {
     Column(
         modifier = modifier
@@ -58,22 +63,25 @@ private fun HomeScreenContent(
             .padding(Spacing.m)
     ) {
         CurrentWeatherInfo(
-            temp = currentWeather.realTemp,
-            description = currentWeather.description,
-            descriptionImage = currentWeather.descriptionImage,
-            city = "Zagreb", // TODO hardcoded
-            feelsLikeTemp = currentWeather.feelsLikeTemp
+            temp = current.tempC.toInt(), // TODO should not be done here
+            description = current.condition.text,
+            descriptionImage = current.condition.icon,
+            city = location.name,
+            feelsLikeTemp = current.feelsLikeC.toInt()
         )
         Spacer(modifier = Modifier.size(Spacing.xl))
-        DailyWeather(
-            condition = condition,
-            minTemp = minTemperature,
-            hourInfo = hourInfo
+//        DailyWeather(
+//            condition = current.condition.text,
+//            minTemp = day.minTempC.toInt(),
+//            hourInfo = emptyList()
+//        )
+        Spacer(modifier = Modifier.size(Spacing.l))
+        WeatherInfoGrid(
+            current = current,
+            astro = astro
         )
         Spacer(modifier = Modifier.size(Spacing.l))
-        WeatherInfoGrid(weatherMetrics = weatherMetrics)
-        Spacer(modifier = Modifier.size(Spacing.l))
-        WeeklyWeather(days = dailyWeatherForecasts)
+//        WeeklyWeather(days = dailyWeatherForecasts)
     }
 }
 
@@ -81,11 +89,9 @@ private fun HomeScreenContent(
 @Composable
 private fun HomeScreenContentPreview() {
     HomeScreenContent(
-        currentWeather = dummyCurrentWeather,
-        condition = "Rainy",
-        minTemperature = 10,
-        hourInfo = dummyHourInfoList,
-        weatherMetrics = dummyWeatherMetrics,
-        dailyWeatherForecasts = dummyDailyWeatherForecasts
+        location = dummyLocation,
+        current = dummyCurrent,
+        astro = dummyAstro,
+        day = dummyDay
     )
 }

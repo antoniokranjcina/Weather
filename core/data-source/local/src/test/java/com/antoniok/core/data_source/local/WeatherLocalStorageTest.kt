@@ -1,18 +1,17 @@
 package com.antoniok.core.data_source.local
 
-import com.antoniok.core.data_source.local.dao.ConditionForecastDao
-import com.antoniok.core.data_source.local.dao.CurrentWeatherDao
-import com.antoniok.core.data_source.local.dao.DailyWeatherForecastDao
-import com.antoniok.core.data_source.local.dao.WeatherMetricsDao
-import com.antoniok.core.data_source.local.entity.ConditionForecastEntity
-import com.antoniok.core.data_source.local.entity.ConditionForecastWithHours
-import com.antoniok.core.data_source.local.entity.CurrentWeatherEntity
-import com.antoniok.core.data_source.local.entity.DailyWeatherForecastEntity
-import com.antoniok.core.data_source.local.entity.HourInfoEntity
-import com.antoniok.core.data_source.local.entity.WeatherMetricsEntity
+import com.antoniok.core.data_source.local.dao.WeatherDao
+import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.entity.current.CurrentEntity
+import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
+import com.antoniok.core.data_source.local.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.entity.location.LocationEntity
+import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -25,243 +24,126 @@ class WeatherLocalStorageTest {
     private lateinit var weatherLocalStorage: WeatherLocalDataSource
 
     @Mock
-    private lateinit var conditionForecastDao: ConditionForecastDao
-
-    @Mock
-    private lateinit var currentWeatherDao: CurrentWeatherDao
-
-    @Mock
-    private lateinit var dailyWeatherForecastDao: DailyWeatherForecastDao
-
-    @Mock
-    private lateinit var weatherMetricsDao: WeatherMetricsDao
+    private lateinit var weatherDao: WeatherDao
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        weatherLocalStorage = WeatherLocalStorage(
-            conditionForecastDao,
-            currentWeatherDao,
-            dailyWeatherForecastDao,
-            weatherMetricsDao
-        )
+        weatherLocalStorage = WeatherLocalStorage(weatherDao)
     }
 
     @Test
-    fun `Given valid ConditionForecastWithHours data, When insertConditionForecastWithHours is called, Then data is inserted correctly`() =
+    fun `GIVEN a weather entity WHEN insertWeather is called THEN it should insert the weather`() =
         runBlocking {
-            weatherLocalStorage.insertConditionForecastWithHours(conditionForecastWithHours)
-            verify(conditionForecastDao).insertConditionForecast(conditionForecastWithHours.conditionForecast)
-            verify(conditionForecastDao).insertHourInfo(conditionForecastWithHours.hoursInfo)
+            weatherLocalStorage.insertWeather(weatherEntity1)
+            verify(weatherDao).insertWeather(weatherEntity1)
         }
 
     @Test
-    fun `Given valid condition forecast and hours info data in the database, When conditionForecastWithHours is accessed, Then the expected data is returned`() =
+    fun `GIVEN a city WHEN getWeatherByCity is called THEN it should return the weather for that city`() =
         runBlocking {
-            val expectedData = ConditionForecastWithHours(
-                conditionForecastEntity,
-                listOf(hourInfoEntity)
-            )
+            val city = "Zagreb"
+            `when`(weatherDao.getWeatherByCity(city)).thenReturn(flowOf(weatherEntity1))
 
-            `when`(conditionForecastDao.getConditionForecasts())
-                .thenReturn(flowOf(conditionForecastEntity))
-            `when`(conditionForecastDao.getHoursInfo())
-                .thenReturn(flowOf(listOf(hourInfoEntity)))
+            val weather = weatherLocalStorage.getWeatherByCity(city)
 
-            val flow = weatherLocalStorage.conditionForecastWithHours
-            val result = flow.single()
-
-            assert(result == expectedData)
+            assertNotNull(weather)
+            assertEquals(weatherEntity1, weather.single())
         }
 
     @Test
-    fun `GIVEN valid ConditionForecastWithHours data, WHEN insertConditionForecastWithHours is called, THEN data is inserted correctly`() =
+    fun `GIVEN weather entities WHEN weathers is called THEN it should return a list of weather entities`() =
         runBlocking {
-            weatherLocalStorage.insertConditionForecastWithHours(conditionForecastWithHours)
-            verify(conditionForecastDao).insertConditionForecast(conditionForecastWithHours.conditionForecast)
-            verify(conditionForecastDao).insertHourInfo(conditionForecastWithHours.hoursInfo)
+            val weatherEntities = listOf(weatherEntity1, weatherEntity2)
+            `when`(weatherDao.getAllWeathers()).thenReturn(flowOf(weatherEntities))
+
+            val weathers = weatherLocalStorage.weathers.single()
+
+            assert(weathers.isNotEmpty())
+            assertEquals(weatherEntities, weathers)
+
         }
 
     @Test
-    fun `GIVEN valid condition forecast and hours info data in the database, WHEN conditionForecastWithHours is accessed, THEN the expected data is returned`() =
+    fun `GIVEN a weather entity WHEN deleteWeather is called THEN it should delete the weather`() =
         runBlocking {
-            val expectedData = ConditionForecastWithHours(
-                conditionForecastEntity,
-                listOf(hourInfoEntity)
-            )
-
-            `when`(conditionForecastDao.getConditionForecasts())
-                .thenReturn(flowOf(conditionForecastEntity))
-            `when`(conditionForecastDao.getHoursInfo())
-                .thenReturn(flowOf(listOf(hourInfoEntity)))
-
-            val flow = weatherLocalStorage.conditionForecastWithHours
-            val result = flow.single()
-
-            assert(result == expectedData)
+            weatherLocalStorage.deleteWeather(weatherEntity1)
+            verify(weatherDao).deleteWeather(weatherEntity1)
         }
 
     @Test
-    fun `GIVEN valid CurrentWeatherEntity data, WHEN insertCurrentWeather is called, THEN data is inserted correctly`() =
+    fun `GIVEN WHEN deleteAllWeathers is called THEN it should delete all weather entities`() {
         runBlocking {
-            weatherLocalStorage.insertCurrentWeather(currentWeatherEntity)
-            verify(currentWeatherDao).insertCurrentWeather(currentWeatherEntity)
+            weatherLocalStorage.deleteAllWeathers()
+            verify(weatherDao).deleteAllWeathers()
         }
-
-    @Test
-    fun `GIVEN valid current weather data in the database, WHEN currentWeather is accessed, THEN the expected data is returned`() =
-        runBlocking {
-            `when`(currentWeatherDao.getCurrentWeather()).thenReturn(flowOf(currentWeatherEntity))
-
-            val flow = weatherLocalStorage.currentWeather
-            val result = flow.single()
-
-            assert(result == currentWeatherEntity)
-        }
-
-    @Test
-    fun `GIVEN valid DailyWeatherForecastEntity data, WHEN insertDailyWeatherForecast is called, THEN data is inserted correctly`() =
-        runBlocking {
-            weatherLocalStorage.insertDailyWeatherForecast(dailyWeatherForecastEntity)
-            verify(dailyWeatherForecastDao).insertDailyWeatherForecast(dailyWeatherForecastEntity)
-        }
-
-    @Test
-    fun `GIVEN valid daily weather forecast data in the database, WHEN dailyWeatherForecast is accessed, THEN the expected data is returned`() =
-        runBlocking {
-            `when`(dailyWeatherForecastDao.getDailyWeatherForecast()).thenReturn(
-                flowOf(dailyWeatherForecastEntity)
-            )
-
-            val flow = weatherLocalStorage.dailyWeatherForecast
-            val result = flow.single()
-
-            assert(result == dailyWeatherForecastEntity)
-        }
-
-    @Test
-    fun `GIVEN valid WeatherMetricsEntity data, WHEN insertWeatherMetrics is called, THEN data is inserted correctly`() =
-        runBlocking {
-            weatherLocalStorage.insertWeatherMetrics(weatherMetricsEntity)
-            verify(weatherMetricsDao).insertWeatherMetrics(weatherMetricsEntity)
-        }
-
-    @Test
-    fun `GIVEN valid weather metrics data in the database, WHEN weatherMetrics is accessed, THEN the expected data is returned`() =
-        runBlocking {
-            `when`(weatherMetricsDao.getWeatherMetrics()).thenReturn(flowOf(weatherMetricsEntity))
-            val flow = weatherLocalStorage.weatherMetrics
-            val result = flow.single()
-
-            assert(result == weatherMetricsEntity)
-        }
-
-    @Test
-    fun `GIVEN valid ConditionForecastWithHours data, WHEN updateConditionForecast is called, THEN data is updated correctly`() =
-        runBlocking {
-            weatherLocalStorage.updateConditionForecast(conditionForecastWithHours)
-            verify(conditionForecastDao).updateConditionForecast(conditionForecastWithHours.conditionForecast)
-            verify(conditionForecastDao).updateHours(conditionForecastWithHours.hoursInfo)
-        }
-
-    @Test
-    fun `GIVEN valid CurrentWeatherEntity data, WHEN updateCurrentWeather is called, THEN data is updated correctly`() =
-        runBlocking {
-            weatherLocalStorage.updateCurrentWeather(currentWeatherEntity)
-            verify(currentWeatherDao).updateCurrentWeather(currentWeatherEntity)
-        }
-
-    @Test
-    fun `GIVEN valid DailyWeatherForecastEntity data, WHEN updateDailyWeatherForecast is called, THEN data is updated correctly`() =
-        runBlocking {
-            weatherLocalStorage.updateDailyWeatherForecast(dailyWeatherForecastEntity)
-            verify(dailyWeatherForecastDao).updateDailyWeatherForecast(dailyWeatherForecastEntity)
-        }
-
-    @Test
-    fun `GIVEN valid WeatherMetricsEntity data, WHEN updateWeatherMetrics is called, THEN data is updated correctly`() =
-        runBlocking {
-            weatherLocalStorage.updateWeatherMetrics(weatherMetricsEntity)
-            verify(weatherMetricsDao).updateWeatherMetrics(weatherMetricsEntity)
-        }
-
-    @Test
-    fun `GIVEN valid ConditionForecastEntity data, WHEN deleteConditionForecast is called, THEN data is deleted correctly`() =
-        runBlocking {
-            weatherLocalStorage.deleteConditionForecast(conditionForecastEntity)
-            verify(conditionForecastDao).deleteConditionForecast(conditionForecastEntity)
-        }
-
-    @Test
-    fun `GIVEN valid HourInfoEntity data, WHEN deleteHour is called, THEN data is deleted correctly`() =
-        runBlocking {
-            weatherLocalStorage.deleteHour(hourInfoEntity)
-            verify(conditionForecastDao).deleteHour(hourInfoEntity)
-        }
-
-    @Test
-    fun `GIVEN valid CurrentWeatherEntity data, WHEN deleteCurrentWeather is called, THEN data is deleted correctly`() =
-        runBlocking {
-            weatherLocalStorage.deleteCurrentWeather(currentWeatherEntity)
-            verify(currentWeatherDao).deleteCurrentWeather(currentWeatherEntity)
-        }
-
-    @Test
-    fun `GIVEN valid DailyWeatherForecastEntity data, WHEN deleteDailyWeatherForecast is called, THEN data is deleted correctly`() =
-        runBlocking {
-            weatherLocalStorage.deleteDailyWeatherForecast(dailyWeatherForecastEntity)
-            verify(dailyWeatherForecastDao).deleteDailyWeatherForecast(dailyWeatherForecastEntity)
-        }
-
-    @Test
-    fun `GIVEN valid WeatherMetricsEntity data, WHEN deleteWeatherMetrics is called, THEN data is deleted correctly`() =
-        runBlocking {
-            weatherLocalStorage.deleteWeatherMetrics(weatherMetricsEntity)
-            verify(weatherMetricsDao).deleteWeatherMetrics(weatherMetricsEntity)
-        }
+    }
 
     companion object {
-        private val conditionForecastEntity = ConditionForecastEntity(
-            id = 1,
-            condition = "Sunny",
-            minTemperature = 25
-        )
-        private val hourInfoEntity = HourInfoEntity(
-            id = 1,
-            hour = 2,
-            temp = 22,
-            image = "",
-            chanceOfRain = 25
-        )
-        private val conditionForecastWithHours = ConditionForecastWithHours(
-            conditionForecast = conditionForecastEntity,
-            hoursInfo = listOf(hourInfoEntity)
+        private val locationEntity = LocationEntity(
+            name = "Zagreb",
+            region = "Grad Zagreb",
+            country = "Croatia",
+            localtimeEpoch = 123,
         )
 
-        private val currentWeatherEntity = CurrentWeatherEntity(
-            realTemperature = 1,
-            description = "Sunny",
-            descriptionImage = "",
-            feelsLikeTemperature = 10
+        private val conditionEntity = ConditionEntity(
+            text = "Clear",
+            code = 1,
+            icon = "www.image.com"
         )
 
-        private val dailyWeatherForecastEntity = DailyWeatherForecastEntity(
-            id = 1,
-            day = 1,
-            chanceOfRain = 25,
-            minConditionImage = "",
-            maxConditionImage = "",
-            minTemp = 10,
-            maxTemp = 25
+        private val currentEntity = CurrentEntity(
+            lastUpdatedEpoch = 123,
+            tempC = 20.5,
+            tempF = 20.5,
+            isDay = 1,
+            condition = conditionEntity,
+            windMph = 12.5,
+            windKph = 12.5,
+            windDegree = 90,
+            windDir = "south",
+            pressureMb = 11.1,
+            pressureIn = 89.1,
+            humidity = 98,
+            cloud = 1,
+            feelsLikeC = 20.1,
+            feelsLikeF = 20.1,
+            uv = 1,
         )
 
-        private val weatherMetricsEntity = WeatherMetricsEntity(
-            id = 1,
-            uvIndex = "Clear",
-            humidity = 20.8,
-            wind = 5.2,
-            sunrise = "06:00 AM",
-            sunset = "07:00 PM"
+        private val dayEntity = DayEntity(
+            maxTempC = 23.1,
+            maxTempF = 23.1,
+            minTempC = 12.1,
+            minTempF = 12.1,
+            conditionText = conditionEntity.text,
+            conditionIcon = conditionEntity.icon,
+            conditionCode = conditionEntity.code,
+        )
+
+        private val astroEntity = AstroEntity(
+            sunrise = "05:12",
+            sunset = "05:12",
+            moonrise = "05:12",
+            moonset = "05:12",
+        )
+
+        val weatherEntity1 = WeatherEntity(
+            id = "Zagreb",
+            location = locationEntity,
+            current = currentEntity,
+            day = dayEntity,
+            astro = astroEntity
+        )
+
+        val weatherEntity2 = WeatherEntity(
+            id = "New York",
+            location = locationEntity,
+            current = currentEntity,
+            day = dayEntity,
+            astro = astroEntity
         )
     }
+
 }

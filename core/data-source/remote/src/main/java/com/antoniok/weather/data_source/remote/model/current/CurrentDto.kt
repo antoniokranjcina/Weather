@@ -1,7 +1,9 @@
 package com.antoniok.weather.data_source.remote.model.current
 
+import com.antoniok.core.data_source.local.entity.current.CurrentEntity
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
+import com.antoniok.weather.data_source.remote.model.shared.asEntity
 import com.google.gson.annotations.SerializedName
 
 data class CurrentDto(
@@ -23,10 +25,29 @@ data class CurrentDto(
     @SerializedName("cloud") val cloud: Int,
     @SerializedName("feelslike_c") val feelsLikeC: Double,
     @SerializedName("feelslike_f") val feelsLikeF: Double,
-    @SerializedName("vis_km") val visKm: Int,
-    @SerializedName("vis_miles") val visMiles: Int,
+    @SerializedName("vis_km") val visKm: Double,
+    @SerializedName("vis_miles") val visMiles: Double,
     @SerializedName("uv") val uv: Int,
     @SerializedName("gust_mph") val gustMph: Double,
     @SerializedName("gust_kph") val gustKph: Double,
     @SerializedName("air_quality") val airQuality: AirQualityDto
+)
+
+fun CurrentDto.asEntity() = CurrentEntity(
+    lastUpdatedEpoch = lastUpdatedEpoch,
+    tempC = tempC,
+    tempF = tempF,
+    isDay = isDay,
+    condition = condition.asEntity(),
+    windMph = windMph,
+    windKph = windKph,
+    windDegree = windDegree,
+    windDir = windDir,
+    pressureMb = pressureMb,
+    pressureIn = pressureIn,
+    humidity = humidity,
+    cloud = cloud,
+    feelsLikeC = feelsLikeC,
+    feelsLikeF = feelsLikeF,
+    uv = uv,
 )

@@ -1,5 +1,6 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
+import com.antoniok.core.data_source.local.entity.forecast.DayEntity
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.google.gson.annotations.SerializedName
@@ -26,4 +27,14 @@ data class DayDto(
     @SerializedName("condition") val condition: ConditionDto,
     @SerializedName("uv") val uv: Int,
     @SerializedName("air_quality") val airQuality: AirQualityDto
+)
+
+fun DayDto.asEntity() = DayEntity(
+    maxTempC = maxTempC,
+    maxTempF = maxTempF,
+    minTempC = minTempC,
+    minTempF = minTempF,
+    conditionText = condition.text,
+    conditionIcon = condition.icon.substring(2),
+    conditionCode = condition.code,
 )
