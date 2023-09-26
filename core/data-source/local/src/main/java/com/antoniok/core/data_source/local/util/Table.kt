@@ -4,13 +4,16 @@ internal object Table {
 
     const val DATABASE_NAME = "weather_database"
 
-    const val CURRENT_WEATHER = "current_weather"
+    const val CURRENT = "current_entity"
+    const val CONDITION = "condition_entity"
 
-    const val DAILY_WEATHER_FORECAST = "daily_weather_forecast"
+    const val ASTRO = "astro_entity"
+    const val DAY = "day_entity"
+    const val FORECAST_DAY = "forecast_day_entity"
+    const val HOUR = "hour_entity"
 
-    const val WEATHER_METRICS = "weather_metrics"
+    const val LOCATION = "location_entity"
 
-    const val CONDITION_FORECAST = "condition_forecast"
-    const val HOUR_INFO = "hour_info"
+    const val WEATHER = "weather_entity"
 
 }

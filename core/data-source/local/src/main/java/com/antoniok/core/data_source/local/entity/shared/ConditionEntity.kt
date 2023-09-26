@@ -2,9 +2,10 @@ package com.antoniok.core.data_source.local.entity.shared
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.antoniok.core.data_source.local.util.Table
 import com.antoniok.core.model.Condition
 
-@Entity
+@Entity(tableName = Table.CONDITION)
 data class ConditionEntity(
     @PrimaryKey(autoGenerate = true)
     val conditionId: Int = 0,

@@ -53,29 +53,29 @@ private fun HomeScreenContent(
             .padding(Spacing.m)
     ) {
         CurrentWeatherInfo(
-            temp = weather.current.tempC.toInt(), // TODO should not be done here
+            temp = weather.current.tempC.toInt(),
             description = weather.current.condition.text,
-            descriptionImage = weather.current.condition.icon,
+            imageCode = weather.current.condition.code,
             city = weather.location.name,
             feelsLikeTemp = weather.current.feelsLikeC.toInt()
         )
-        Spacer(modifier = Modifier.size(Spacing.xl))
         if (weather.hours.isNotEmpty()) {
+            Spacer(modifier = Modifier.size(Spacing.xl))
             DailyWeather(
                 condition = weather.current.condition.text,
                 minTemp = weather.day.minTempC.toInt(),
                 hours = weather.hours
             )
-            Spacer(modifier = Modifier.size(Spacing.l))
         }
+        Spacer(modifier = Modifier.size(Spacing.l))
+        if (weather.days.isNotEmpty()) {
+            WeeklyWeather(days = weather.days)
+        }
+        Spacer(modifier = Modifier.size(Spacing.l))
         WeatherInfoGrid(
             current = weather.current,
             astro = weather.astro
         )
-        if (weather.days.isNotEmpty()) {
-            Spacer(modifier = Modifier.size(Spacing.l))
-            WeeklyWeather(days = weather.days)
-        }
     }
 }
 

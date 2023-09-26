@@ -2,14 +2,16 @@ package com.antoniok.core.data_source.local.entity.forecast
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.antoniok.core.data_source.local.util.Table
 import com.antoniok.core.model.Condition
 import com.antoniok.core.model.Hour
 
-@Entity
+@Entity(tableName = Table.HOUR)
 data class HourEntity(
     @PrimaryKey(autoGenerate = false)
     val hourId: String,
     val id: String,
+    val isDay: Boolean,
     val hour: Int,
     val feelsLikeC: Double,
     val tempC: Double,
@@ -21,6 +23,7 @@ data class HourEntity(
 
 fun HourEntity.asExternalModule() = Hour(
     hour = hour,
+    isDay = isDay,
     feelsLikeC = feelsLikeC,
     tempC = tempC,
     chanceOfRain = chanceOfRain,

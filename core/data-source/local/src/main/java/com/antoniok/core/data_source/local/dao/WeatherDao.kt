@@ -25,14 +25,14 @@ internal interface WeatherDao {
     suspend fun insertForecastDays(forecastDays: List<ForecastDayEntity>)
 
     @Transaction
-    @Query("SELECT * FROM WeatherEntity WHERE name = :city")
+    @Query("SELECT * FROM weather_entity WHERE name = :city")
     fun getWeatherByCity(city: String): Flow<WeatherWithDaysAndHours?>
 
     @Transaction
-    @Query("SELECT * FROM WeatherEntity")
+    @Query("SELECT * FROM weather_entity")
     fun getAllWeathers(): Flow<List<WeatherWithDaysAndHours>>
 
-    @Query("DELETE FROM WeatherEntity")
+    @Query("DELETE FROM weather_entity")
     suspend fun deleteAllWeathers(): Int
 
     @Delete

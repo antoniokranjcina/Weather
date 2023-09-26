@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
+import com.antoniok.core.ui.icon.ConditionIcon
 import com.antoniok.core.ui.icon.WeatherIcon
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.weather.feature.home.R
@@ -27,10 +28,12 @@ fun CurrentWeatherInfo(
     modifier: Modifier = Modifier,
     temp: Int,
     description: String,
-    descriptionImage: String,
+    imageCode: Int,
     city: String,
     feelsLikeTemp: Int
 ) {
+    val image = ConditionIcon.findWeatherIcon(imageCode)
+
     Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -70,7 +73,7 @@ fun CurrentWeatherInfo(
             }
             Image(
                 modifier = Modifier.size(Spacing.x3l),
-                painter = rememberAsyncImagePainter(descriptionImage),
+                painter = rememberAsyncImagePainter(image),
                 contentDescription = null,
             )
         }
@@ -84,7 +87,7 @@ private fun WeatherCardPreview() {
     CurrentWeatherInfo(
         temp = 22,
         description = "Rainy",
-        descriptionImage = "",
+        imageCode = 0,
         city = "Zagreb",
         feelsLikeTemp = 22
     )
