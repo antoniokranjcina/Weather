@@ -7,8 +7,9 @@ import com.antoniok.core.data_source.local.entity.current.CurrentEntity
 import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
 import com.antoniok.core.data_source.local.entity.forecast.DayEntity
 import com.antoniok.core.data_source.local.entity.location.LocationEntity
+import com.antoniok.core.data_source.local.util.Table
 
-@Entity
+@Entity(tableName = Table.WEATHER)
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,

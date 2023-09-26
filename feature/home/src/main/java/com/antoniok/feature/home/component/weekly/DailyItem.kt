@@ -2,6 +2,7 @@ package com.antoniok.feature.home.component.weekly
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,38 +31,47 @@ fun DailyItem(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = day,
-            style = MaterialTheme.typography.labelLarge
-        )
-        ChanceOfRain(chanceOfRain = chanceOfRain)
-        Row {
-            Image(
-                modifier = Modifier.size(Spacing.xl),
-//            painter = rememberAsyncImagePainter(minConditionImage), // TODO will be needed
-                painter = painterResource(id = WeatherIcon.Sun),
-                contentDescription = null,
-            )
-            Spacer(modifier = Modifier.size(Spacing.xs))
-            Image(
-                modifier = Modifier.size(Spacing.xl),
-//            painter = rememberAsyncImagePainter(maxConditionImage), // TODO will be needed
-                painter = painterResource(id = WeatherIcon.Sun),
-                contentDescription = null,
+        Box(modifier = Modifier.weight(0.35f)) {
+            Text(
+                text = day,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.fillMaxWidth()
             )
         }
-        Row {
-            Text(
-                text = "$minTemp°",
-                style = MaterialTheme.typography.labelLarge
-            )
-            Spacer(modifier = Modifier.size(Spacing.xs))
-            Text(
-                text = "$maxTemp°",
-                style = MaterialTheme.typography.labelLarge
-            )
+        Box(modifier = Modifier.weight(0.65f)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                ChanceOfRain(chanceOfRain = chanceOfRain)
+                Row {
+                    Image(
+                        modifier = Modifier.size(Spacing.xl),
+                        painter = painterResource(id = WeatherIcon.Sun),
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.size(Spacing.xs))
+                    Image(
+                        modifier = Modifier.size(Spacing.xl),
+                        painter = painterResource(id = WeatherIcon.Sun),
+                        contentDescription = null,
+                    )
+                }
+                Row {
+                    Text(
+                        text = "$minTemp°",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Spacer(modifier = Modifier.size(Spacing.xs))
+                    Text(
+                        text = "$maxTemp°",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+
         }
     }
 }

@@ -5,9 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
 import com.antoniok.core.data_source.local.entity.shared.asExternalModule
+import com.antoniok.core.data_source.local.util.Table
 import com.antoniok.core.model.Current
 
-@Entity
+@Entity(tableName = Table.CURRENT)
 data class CurrentEntity(
     @PrimaryKey(autoGenerate = true)
     val currentId: Int = 0,

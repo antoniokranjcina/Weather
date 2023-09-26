@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.antoniok.core.model.ForecastDay
 import com.antoniok.core.model.dummyDays
 import com.antoniok.core.ui.spacing.Spacing
+import com.antoniok.feature.home.util.toDay
+import com.antoniok.weather.feature.home.R
 
 @Composable
 fun WeeklyWeather(
@@ -19,14 +22,20 @@ fun WeeklyWeather(
         Column(
             modifier = Modifier.padding(Spacing.l)
         ) {
-            days.forEach {
+            days.forEachIndexed { index, day ->
                 DailyItem(
-                    day = it.day.toString(), // TODO
-                    chanceOfRain = it.chanceOfRain.toInt(),
-                    minConditionImage = it.minCondition.icon,
-                    maxConditionImage = it.maxCondition.icon,
-                    minTemp = it.minTempC.toInt(),
-                    maxTemp = it.maxTempC.toInt()
+                    day = stringResource(
+                        id = if (index == 0) {
+                            R.string.today
+                        } else {
+                            day.day.toDay()
+                        }
+                    ),
+                    chanceOfRain = day.chanceOfRain,
+                    minConditionImage = day.minCondition.icon,
+                    maxConditionImage = day.maxCondition.icon,
+                    minTemp = day.minTempC.toInt(),
+                    maxTemp = day.maxTempC.toInt()
                 )
             }
         }

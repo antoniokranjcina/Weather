@@ -2,10 +2,11 @@ package com.antoniok.core.data_source.local.entity.forecast
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.antoniok.core.data_source.local.util.Table
 import com.antoniok.core.model.Condition
 import com.antoniok.core.model.Hour
 
-@Entity
+@Entity(tableName = Table.HOUR)
 data class HourEntity(
     @PrimaryKey(autoGenerate = false)
     val hourId: String,

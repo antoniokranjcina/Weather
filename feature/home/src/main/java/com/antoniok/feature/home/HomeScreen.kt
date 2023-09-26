@@ -59,23 +59,23 @@ private fun HomeScreenContent(
             city = weather.location.name,
             feelsLikeTemp = weather.current.feelsLikeC.toInt()
         )
-        Spacer(modifier = Modifier.size(Spacing.xl))
         if (weather.hours.isNotEmpty()) {
+            Spacer(modifier = Modifier.size(Spacing.xl))
             DailyWeather(
                 condition = weather.current.condition.text,
                 minTemp = weather.day.minTempC.toInt(),
                 hours = weather.hours
             )
-            Spacer(modifier = Modifier.size(Spacing.l))
         }
+        Spacer(modifier = Modifier.size(Spacing.l))
+        if (weather.days.isNotEmpty()) {
+            WeeklyWeather(days = weather.days)
+        }
+        Spacer(modifier = Modifier.size(Spacing.l))
         WeatherInfoGrid(
             current = weather.current,
             astro = weather.astro
         )
-        if (weather.days.isNotEmpty()) {
-            Spacer(modifier = Modifier.size(Spacing.l))
-            WeeklyWeather(days = weather.days)
-        }
     }
 }
 

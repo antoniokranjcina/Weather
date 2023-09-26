@@ -2,10 +2,11 @@ package com.antoniok.core.data_source.local.entity.forecast
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.antoniok.core.data_source.local.util.Table
 import com.antoniok.core.model.Condition
 import com.antoniok.core.model.ForecastDay
 
-@Entity
+@Entity(tableName = Table.FORECAST_DAY)
 data class ForecastDayEntity(
     @PrimaryKey(autoGenerate = false)
     val forecastDayId: String,
