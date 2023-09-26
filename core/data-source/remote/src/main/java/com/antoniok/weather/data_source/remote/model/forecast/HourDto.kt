@@ -46,6 +46,7 @@ data class HourDto(
 fun HourDto.asEntity(id: String) = HourEntity(
     hourId = "$id${timeEpoch.getHour()}",
     id = id,
+    isDay = isDay != 0,
     hour = timeEpoch.getHour(),
     feelsLikeC = feelsLikeC,
     tempC = tempC,

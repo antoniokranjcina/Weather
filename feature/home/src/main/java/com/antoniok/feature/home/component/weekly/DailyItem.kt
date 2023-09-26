@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.antoniok.core.ui.icon.WeatherIcon
+import com.antoniok.core.ui.icon.ConditionIcon
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.feature.home.component.shared.ChanceOfRain
 
@@ -23,11 +23,14 @@ fun DailyItem(
     modifier: Modifier = Modifier,
     day: String,
     chanceOfRain: Int,
-    minConditionImage: String,
-    maxConditionImage: String,
+    minConditionCode: Int,
+    maxConditionCode: Int,
     minTemp: Int,
     maxTemp: Int
 ) {
+    val minConditionImage = ConditionIcon.findWeatherIcon(minConditionCode)
+    val maxConditionImage = ConditionIcon.findWeatherIcon(maxConditionCode)
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -49,13 +52,13 @@ fun DailyItem(
                 Row {
                     Image(
                         modifier = Modifier.size(Spacing.xl),
-                        painter = painterResource(id = WeatherIcon.Sun),
+                        painter = painterResource(id = minConditionImage),
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.size(Spacing.xs))
                     Image(
                         modifier = Modifier.size(Spacing.xl),
-                        painter = painterResource(id = WeatherIcon.Sun),
+                        painter = painterResource(id = maxConditionImage),
                         contentDescription = null,
                     )
                 }
@@ -84,7 +87,7 @@ private fun DailyItemPreview() {
         chanceOfRain = 22,
         minTemp = 12,
         maxTemp = 22,
-        minConditionImage = "",
-        maxConditionImage = ""
+        minConditionCode = 0,
+        maxConditionCode = 0
     )
 }

@@ -40,10 +40,11 @@ fun DailyWeather(
                 val rotated = hours.drop(initialItemIndex) + hours.take(initialItemIndex)
                 items(rotated) {
                     HourItem(
+                        isDay = it.isDay,
                         hour = it.hour,
-                        image = it.condition.icon,
+                        imageCode = it.condition.code,
                         temp = it.tempC.toInt(),
-                        chanceOfRain = it.chanceOfRain.toInt()
+                        chanceOfRain = it.chanceOfRain
                     )
                 }
             }

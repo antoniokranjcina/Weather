@@ -53,9 +53,9 @@ private fun HomeScreenContent(
             .padding(Spacing.m)
     ) {
         CurrentWeatherInfo(
-            temp = weather.current.tempC.toInt(), // TODO should not be done here
+            temp = weather.current.tempC.toInt(),
             description = weather.current.condition.text,
-            descriptionImage = weather.current.condition.icon,
+            imageCode = weather.current.condition.code,
             city = weather.location.name,
             feelsLikeTemp = weather.current.feelsLikeC.toInt()
         )

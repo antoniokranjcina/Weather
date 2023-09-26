@@ -11,6 +11,7 @@ data class HourEntity(
     @PrimaryKey(autoGenerate = false)
     val hourId: String,
     val id: String,
+    val isDay: Boolean,
     val hour: Int,
     val feelsLikeC: Double,
     val tempC: Double,
@@ -22,6 +23,7 @@ data class HourEntity(
 
 fun HourEntity.asExternalModule() = Hour(
     hour = hour,
+    isDay = isDay,
     feelsLikeC = feelsLikeC,
     tempC = tempC,
     chanceOfRain = chanceOfRain,

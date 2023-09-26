@@ -32,8 +32,8 @@ fun WeeklyWeather(
                         }
                     ),
                     chanceOfRain = day.chanceOfRain,
-                    minConditionImage = day.minCondition.icon,
-                    maxConditionImage = day.maxCondition.icon,
+                    minConditionCode = day.minCondition.code,
+                    maxConditionCode = day.maxCondition.code,
                     minTemp = day.minTempC.toInt(),
                     maxTemp = day.maxTempC.toInt()
                 )
