@@ -1,15 +1,17 @@
 package com.antoniok.core.data_source.local
 
-import com.antoniok.core.data_source.local.dao.WeatherDao
-import com.antoniok.core.data_source.local.entity.WeatherEntity
-import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
-import com.antoniok.core.data_source.local.entity.current.CurrentEntity
-import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
-import com.antoniok.core.data_source.local.entity.forecast.DayEntity
-import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
-import com.antoniok.core.data_source.local.entity.forecast.HourEntity
-import com.antoniok.core.data_source.local.entity.location.LocationEntity
-import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
+import com.antoniok.core.data_source.local.database.dao.WeatherDao
+import com.antoniok.core.data_source.local.database.entity.WeatherEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.database.entity.current.CurrentEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.AstroEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.database.entity.location.LocationEntity
+import com.antoniok.core.data_source.local.database.entity.shared.ConditionEntity
+import com.antoniok.core.data_source.local.preferences.LocalDataStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
@@ -29,10 +31,13 @@ class WeatherLocalStorageTest {
     @Mock
     private lateinit var weatherDao: WeatherDao
 
+    @Mock
+    private lateinit var localDataStore: LocalDataStore
+
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        weatherLocalStorage = WeatherLocalStorage(weatherDao)
+        weatherLocalStorage = WeatherLocalStorage(weatherDao, localDataStore)
     }
 
     @Test
@@ -95,6 +100,21 @@ class WeatherLocalStorageTest {
             verify(weatherDao).deleteAllWeathers()
         }
     }
+
+    @Test
+    fun `GIVEN saveIndex is called WHEN an index is provided THEN it should be saved`() =
+        runBlocking {
+            weatherLocalStorage.saveIndex(11)
+            verify(localDataStore).saveIndex(11)
+        }
+
+    @Test
+    fun `GIVEN index flow is requested WHEN data is available THEN it should return the flow`() =
+        runBlocking {
+            `when`(localDataStore.index).thenReturn(flowOf(1))
+            val result = localDataStore.index.first()
+            assertEquals(result, 1)
+        }
 
     companion object {
         private val locationEntity = LocationEntity(
@@ -176,6 +196,7 @@ class WeatherLocalStorageTest {
 
         val hourEntities = listOf(
             HourEntity(
+                isDay = true,
                 hourId = "",
                 id = "",
                 hour = 1,

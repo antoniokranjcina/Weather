@@ -30,6 +30,7 @@ dependencies {
     implementation(project(Module.coreUi))
     implementation(project(Module.coreModel))
     implementation(project(Module.coreData))
+    implementation(project(Module.coreDataSourceLocal)) // TODO delete later
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)

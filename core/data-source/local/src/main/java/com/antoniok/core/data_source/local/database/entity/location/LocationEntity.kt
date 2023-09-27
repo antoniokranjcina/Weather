@@ -1,8 +1,8 @@
-package com.antoniok.core.data_source.local.entity.location
+package com.antoniok.core.data_source.local.database.entity.location
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.antoniok.core.data_source.local.util.Table
+import com.antoniok.core.data_source.local.database.util.Table
 import com.antoniok.core.model.Location
 
 @Entity(tableName = Table.LOCATION)

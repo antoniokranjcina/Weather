@@ -1,7 +1,7 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
-import com.antoniok.core.data_source.local.entity.forecast.HourEntity
-import com.antoniok.core.data_source.local.util.getHour
+import com.antoniok.core.data_source.local.database.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.database.util.getHour
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.google.gson.annotations.SerializedName

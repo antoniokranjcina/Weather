@@ -1,7 +1,7 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
-import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
-import com.antoniok.core.data_source.local.util.getDayOfWeek
+import com.antoniok.core.data_source.local.database.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.database.util.getDayOfWeek
 import com.google.gson.annotations.SerializedName
 
 data class ForecastDayDto(
@@ -13,7 +13,7 @@ data class ForecastDayDto(
 )
 
 fun ForecastDayDto.asEntity(id: String) = ForecastDayEntity(
-    forecastDayId = "$id$day",
+    forecastDayId = "$id$date",
     id = id,
     day = dateEpoch.getDayOfWeek(),
     chanceOfRain = day.dailyChanceOfRain,

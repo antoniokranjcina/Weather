@@ -1,11 +1,11 @@
-package com.antoniok.core.data_source.local.entity.current
+package com.antoniok.core.data_source.local.database.entity.current
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
-import com.antoniok.core.data_source.local.entity.shared.asExternalModule
-import com.antoniok.core.data_source.local.util.Table
+import com.antoniok.core.data_source.local.database.entity.shared.ConditionEntity
+import com.antoniok.core.data_source.local.database.entity.shared.asExternalModule
+import com.antoniok.core.data_source.local.database.util.Table
 import com.antoniok.core.model.Current
 
 @Entity(tableName = Table.CURRENT)

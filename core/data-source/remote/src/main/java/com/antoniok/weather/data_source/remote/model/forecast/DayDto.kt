@@ -1,6 +1,6 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
-import com.antoniok.core.data_source.local.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.DayEntity
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.google.gson.annotations.SerializedName

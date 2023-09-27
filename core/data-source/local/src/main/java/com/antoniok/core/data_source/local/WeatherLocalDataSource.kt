@@ -1,9 +1,9 @@
 package com.antoniok.core.data_source.local
 
-import com.antoniok.core.data_source.local.entity.WeatherEntity
-import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
-import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
-import com.antoniok.core.data_source.local.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.database.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.HourEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -48,5 +48,9 @@ interface WeatherLocalDataSource {
      * @param weather The [WeatherEntity] to be deleted.
      */
     suspend fun deleteWeather(weather: WeatherEntity)
+
+    suspend fun saveIndex(index: Int)
+
+    val index: Flow<Int>
 
 }
