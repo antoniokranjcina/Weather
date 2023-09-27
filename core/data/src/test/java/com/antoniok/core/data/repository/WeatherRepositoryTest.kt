@@ -1,14 +1,15 @@
 package com.antoniok.core.data.repository
 
+import com.antoniok.core.data.repository.impl.OfflineFirstWeatherRepository
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
-import com.antoniok.core.data_source.local.entity.WeatherEntity
-import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
-import com.antoniok.core.data_source.local.entity.asExternalModule
-import com.antoniok.core.data_source.local.entity.current.CurrentEntity
-import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
-import com.antoniok.core.data_source.local.entity.forecast.DayEntity
-import com.antoniok.core.data_source.local.entity.location.LocationEntity
-import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.database.entity.asExternalModule
+import com.antoniok.core.data_source.local.database.entity.current.CurrentEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.AstroEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.DayEntity
+import com.antoniok.core.data_source.local.database.entity.location.LocationEntity
+import com.antoniok.core.data_source.local.database.entity.shared.ConditionEntity
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
@@ -113,7 +114,7 @@ class WeatherRepositoryTest {
             moonset = "05:12",
         )
 
-        val weatherEntity1 = WeatherEntity(
+        private val weatherEntity1 = WeatherEntity(
             id = "Zagreb",
             location = locationEntity,
             current = currentEntity,
@@ -121,7 +122,7 @@ class WeatherRepositoryTest {
             astro = astroEntity
         )
 
-        val weatherEntity2 = WeatherEntity(
+        private val weatherEntity2 = WeatherEntity(
             id = "New York",
             location = locationEntity,
             current = currentEntity,

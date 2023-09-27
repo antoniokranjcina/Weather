@@ -1,13 +1,13 @@
-package com.antoniok.core.data_source.local.entity
+package com.antoniok.core.data_source.local.database.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.antoniok.core.data_source.local.entity.current.asExternalModule
-import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
-import com.antoniok.core.data_source.local.entity.forecast.HourEntity
-import com.antoniok.core.data_source.local.entity.forecast.asExternalModel
-import com.antoniok.core.data_source.local.entity.forecast.asExternalModule
-import com.antoniok.core.data_source.local.entity.location.asExternalModule
+import com.antoniok.core.data_source.local.database.entity.current.asExternalModule
+import com.antoniok.core.data_source.local.database.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.asExternalModel
+import com.antoniok.core.data_source.local.database.entity.forecast.asExternalModule
+import com.antoniok.core.data_source.local.database.entity.location.asExternalModule
 import com.antoniok.core.model.Weather
 
 data class WeatherWithDaysAndHours(

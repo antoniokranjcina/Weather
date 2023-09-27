@@ -1,6 +1,6 @@
 package com.antoniok.weather.data_source.remote.model.shared
 
-import com.antoniok.core.data_source.local.entity.shared.ConditionEntity
+import com.antoniok.core.data_source.local.database.entity.shared.ConditionEntity
 import com.google.gson.annotations.SerializedName
 
 data class ConditionDto(

@@ -14,4 +14,7 @@ object AndroidX {
     const val lifecycleViewModel =
         "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleViewModelVersion"
 
+    private const val preferencesVersion = "1.0.0"
+    const val preferences = "androidx.datastore:datastore-preferences:$preferencesVersion"
+
 }

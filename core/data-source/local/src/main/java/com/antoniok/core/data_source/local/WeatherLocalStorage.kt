@@ -1,13 +1,17 @@
 package com.antoniok.core.data_source.local
 
-import com.antoniok.core.data_source.local.dao.WeatherDao
-import com.antoniok.core.data_source.local.entity.WeatherEntity
-import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
-import com.antoniok.core.data_source.local.entity.forecast.ForecastDayEntity
-import com.antoniok.core.data_source.local.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.database.dao.WeatherDao
+import com.antoniok.core.data_source.local.database.entity.WeatherEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.database.entity.forecast.ForecastDayEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.HourEntity
+import com.antoniok.core.data_source.local.preferences.LocalDataStore
 import kotlinx.coroutines.flow.Flow
 
-internal class WeatherLocalStorage(private val weatherDao: WeatherDao) : WeatherLocalDataSource {
+internal class WeatherLocalStorage(
+    private val weatherDao: WeatherDao,
+    private val localDataStore: LocalDataStore
+) : WeatherLocalDataSource {
 
     override suspend fun insertWeather(weather: WeatherEntity) {
         weatherDao.insertWeather(weather)
@@ -34,5 +38,12 @@ internal class WeatherLocalStorage(private val weatherDao: WeatherDao) : Weather
     override suspend fun deleteWeather(weather: WeatherEntity) {
         weatherDao.deleteWeather(weather)
     }
+
+    override suspend fun saveIndex(index: Int) {
+        localDataStore.saveIndex(index)
+    }
+
+    override val index: Flow<Int>
+        get() = localDataStore.index
 
 }

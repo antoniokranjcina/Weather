@@ -1,8 +1,9 @@
-package com.antoniok.core.data.repository
+package com.antoniok.core.data.repository.impl
 
+import com.antoniok.core.data.repository.WeatherRepository
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
-import com.antoniok.core.data_source.local.entity.WeatherWithDaysAndHours
-import com.antoniok.core.data_source.local.entity.asExternalModule
+import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
+import com.antoniok.core.data_source.local.database.entity.asExternalModule
 import com.antoniok.core.model.Weather
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
 import com.antoniok.weather.data_source.remote.model.asEntity

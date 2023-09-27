@@ -55,11 +55,13 @@ dependencies {
     implementation(project(Module.coreDataSourceLocal))
     implementation(project(Module.coreModel))
     implementation(project(Module.coreData))
+    implementation(project(Module.coreUi))
 
     implementation(project(Module.featureHome))
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.lifecycleRuntime)
+    implementation(AndroidX.lifecycleRuntimeCompose)
 
     implementation(platform(Compose.BOM))
     implementation(Compose.ui)

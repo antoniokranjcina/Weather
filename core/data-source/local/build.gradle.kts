@@ -30,6 +30,8 @@ dependencies {
     kapt(Room.roomCompiler)
     implementation(Room.roomKtx)
 
+    implementation(AndroidX.preferences)
+
     testImplementation(UnitTesting.junit4)
     testImplementation(UnitTesting.truth)
     testImplementation(UnitTesting.coroutinesTest)

@@ -1,6 +1,6 @@
 package com.antoniok.weather.data_source.remote.model
 
-import com.antoniok.core.data_source.local.entity.WeatherEntity
+import com.antoniok.core.data_source.local.database.entity.WeatherEntity
 import com.antoniok.weather.data_source.remote.model.alerts.AlertsDto
 import com.antoniok.weather.data_source.remote.model.current.CurrentDto
 import com.antoniok.weather.data_source.remote.model.current.asEntity

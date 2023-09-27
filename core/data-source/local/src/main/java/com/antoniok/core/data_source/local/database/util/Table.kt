@@ -1,4 +1,4 @@
-package com.antoniok.core.data_source.local.util
+package com.antoniok.core.data_source.local.database.util
 
 internal object Table {
 

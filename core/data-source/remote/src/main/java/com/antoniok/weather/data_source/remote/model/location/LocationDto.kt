@@ -1,6 +1,6 @@
 package com.antoniok.weather.data_source.remote.model.location
 
-import com.antoniok.core.data_source.local.entity.location.LocationEntity
+import com.antoniok.core.data_source.local.database.entity.location.LocationEntity
 import com.google.gson.annotations.SerializedName
 
 data class LocationDto(

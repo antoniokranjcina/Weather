@@ -1,6 +1,6 @@
 package com.antoniok.weather.data_source.remote.model.forecast
 
-import com.antoniok.core.data_source.local.entity.forecast.AstroEntity
+import com.antoniok.core.data_source.local.database.entity.forecast.AstroEntity
 import com.google.gson.annotations.SerializedName
 
 data class AstroDto(
