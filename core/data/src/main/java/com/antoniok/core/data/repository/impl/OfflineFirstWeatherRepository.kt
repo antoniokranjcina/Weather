@@ -10,6 +10,7 @@ import com.antoniok.weather.data_source.remote.model.asEntity
 import com.antoniok.weather.data_source.remote.model.forecast.asEntity
 import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 internal class OfflineFirstWeatherRepository(
@@ -27,6 +28,18 @@ internal class OfflineFirstWeatherRepository(
         get() = localDataSource.weathers.map { it.map(WeatherWithDaysAndHours::asExternalModule) }
 
     override suspend fun sync(city: String, days: Int): Boolean {
+        val cities = localDataSource.cities.first()
+        return if (cities.isNotEmpty()) {
+            cities.forEach {
+                getCityFromNetworkAndSaveIt(city = it, days = days)
+            }
+            true
+        } else {
+            getCityFromNetworkAndSaveIt(city = city, days = days)
+        }
+    }
+
+    private suspend fun getCityFromNetworkAndSaveIt(city: String, days: Int): Boolean {
         val weather = networkDataSource.getWeather(
             city = city,
             days = days

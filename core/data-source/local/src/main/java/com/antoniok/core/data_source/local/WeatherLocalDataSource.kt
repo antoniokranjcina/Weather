@@ -38,6 +38,13 @@ interface WeatherLocalDataSource {
     val weathers: Flow<List<WeatherWithDaysAndHours>>
 
     /**
+     * Retrieves a list of all city entities stored in the local storage.
+     *
+     * @return A [Flow] emitting a list of [String] objects.
+     */
+    val cities: Flow<List<String>>
+
+    /**
      * Deletes all weather entities from the local storage.
      */
     suspend fun deleteAllWeathers()

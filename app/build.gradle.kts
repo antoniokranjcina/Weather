@@ -63,6 +63,8 @@ dependencies {
     implementation(AndroidX.lifecycleRuntime)
     implementation(AndroidX.lifecycleRuntimeCompose)
 
+    implementation(WorkManager.workManagerRuntime)
+
     implementation(platform(Compose.BOM))
     implementation(Compose.ui)
     implementation(Compose.uiGraphics)
