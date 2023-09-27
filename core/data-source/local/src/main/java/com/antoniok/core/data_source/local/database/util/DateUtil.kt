@@ -25,3 +25,13 @@ fun Int.getHour(): Int {
     calendar.timeInMillis = this.toLong() * 1000
     return calendar.get(Calendar.HOUR_OF_DAY)
 }
+
+fun Int.getTime(): String {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this.toLong() * 1000
+
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val minute = calendar.get(Calendar.MINUTE)
+
+    return "$hour:$minute"
+}

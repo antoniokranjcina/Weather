@@ -32,6 +32,9 @@ internal interface WeatherDao {
     @Query("SELECT * FROM weather_entity ORDER BY id DESC")
     fun getAllWeathers(): Flow<List<WeatherWithDaysAndHours>>
 
+    @Query("SELECT name FROM weather_entity")
+    fun getCities(): Flow<List<String>>
+
     @Query("DELETE FROM weather_entity")
     suspend fun deleteAllWeathers(): Int
 

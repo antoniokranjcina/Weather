@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.antoniok.core.model.Astro
 import com.antoniok.core.model.Current
+import com.antoniok.core.model.dummyAstro
+import com.antoniok.core.model.dummyCurrent
 import com.antoniok.core.ui.icon.WeatherIcon
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.weather.feature.home.R
@@ -59,11 +62,12 @@ fun WeatherInfoGrid(
 
     }
 }
-//
-//@Preview
-//@Composable
-//private fun WeatherInfoPreview() {
-//    WeatherInfoGrid(
-//        weatherMetrics = dummyWeatherMetrics
-//    )
-//}
+
+@Preview
+@Composable
+private fun WeatherInfoPreview() {
+    WeatherInfoGrid(
+        current = dummyCurrent,
+        astro = dummyAstro
+    )
+}

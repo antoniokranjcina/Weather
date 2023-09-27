@@ -1,8 +1,5 @@
 package com.antoniok.feature.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antoniok.core.data.repository.ModalItemsRepository
@@ -13,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 sealed interface WeatherUiState {
     object Loading : WeatherUiState
@@ -22,7 +18,7 @@ sealed interface WeatherUiState {
 }
 
 class HomeViewModel(
-    private val weatherRepository: WeatherRepository,
+    weatherRepository: WeatherRepository,
     modalItemsRepository: ModalItemsRepository
 ) : ViewModel() {
 
@@ -43,18 +39,4 @@ class HomeViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = WeatherUiState.Loading,
         )
-
-    var isSyncSuccess by mutableStateOf(false)
-        private set
-
-    // TODO move this to Worker
-    init {
-        viewModelScope.launch {
-            isSyncSuccess = weatherRepository.sync(
-                city = "New York",
-                days = 7
-            )
-        }
-    }
-
 }

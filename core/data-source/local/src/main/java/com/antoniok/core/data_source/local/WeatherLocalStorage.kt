@@ -31,6 +31,9 @@ internal class WeatherLocalStorage(
     override val weathers: Flow<List<WeatherWithDaysAndHours>>
         get() = weatherDao.getAllWeathers()
 
+    override val cities: Flow<List<String>>
+        get() = weatherDao.getCities()
+
     override suspend fun deleteAllWeathers() {
         weatherDao.deleteAllWeathers()
     }
