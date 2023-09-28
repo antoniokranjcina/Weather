@@ -1,5 +1,9 @@
 package com.antoniok.core.ui.icon
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import com.antoniok.weather.core.ui.R
 
 object WeatherIcon {
@@ -13,4 +17,8 @@ object WeatherIcon {
     val Sunset = R.drawable.ic_sunset
     val Wind = R.drawable.ic_wind
 
+    val Menu = Icons.Default.Menu
+    val Search = Icons.Default.Search
+    val Close = Icons.Default.Close
+    val History = R.drawable.ic_history
 }

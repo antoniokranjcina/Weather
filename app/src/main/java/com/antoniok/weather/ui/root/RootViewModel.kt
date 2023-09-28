@@ -23,7 +23,10 @@ class RootViewModel(
         private set
 
     private var _index = MutableStateFlow(0)
-    var index: StateFlow<Int> = _index
+    val index: StateFlow<Int> = _index
+
+    private var _historyItems = MutableStateFlow<List<String>>(emptyList())
+    val historyItems: StateFlow<List<String>> = _historyItems
 
     fun updateIndex(index: Int) {
         viewModelScope.launch {
@@ -33,7 +36,7 @@ class RootViewModel(
 
     init {
         collectModalItemIndex()
-        collectNavigationItems()
+        collectWeatherItems()
     }
 
     private fun collectModalItemIndex() {
@@ -44,7 +47,7 @@ class RootViewModel(
         }
     }
 
-    private fun collectNavigationItems() {
+    private fun collectWeatherItems() {
         viewModelScope.launch {
             weatherRepository.weathers
                 .collectLatest { weathers ->
@@ -57,8 +60,15 @@ class RootViewModel(
                             temperature = weather.current.tempC.toInt()
                         )
                     }
+                    _historyItems.value = weathers.map {
+                        it.location.name
+                    }
                 }
         }
     }
 
+    fun addNewSearchItem(newItem: String) {
+        viewModelScope.launch {
+        }
+    }
 }
