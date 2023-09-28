@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antoniok.core.data.repository.ModalItemsRepository
+import com.antoniok.core.data.repository.SearchCityRepository
 import com.antoniok.core.data.repository.WeatherRepository
+import com.antoniok.core.model.SearchedLocation
 import com.antoniok.core.ui.icon.ConditionIcon
 import com.antoniok.weather.navigation.ModalNavigationItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class RootViewModel(
     private val weatherRepository: WeatherRepository,
+    private val searchCityRepository: SearchCityRepository,
     private val modalItemsRepository: ModalItemsRepository
 ) : ViewModel() {
 
@@ -25,8 +28,8 @@ class RootViewModel(
     private var _index = MutableStateFlow(0)
     val index: StateFlow<Int> = _index
 
-    private var _historyItems = MutableStateFlow<List<String>>(emptyList())
-    val historyItems: StateFlow<List<String>> = _historyItems
+    private var _searchedLocations = MutableStateFlow<List<SearchedLocation>>(emptyList())
+    val searchedLocations: StateFlow<List<SearchedLocation>> = _searchedLocations
 
     fun updateIndex(index: Int) {
         viewModelScope.launch {
@@ -60,15 +63,19 @@ class RootViewModel(
                             temperature = weather.current.tempC.toInt()
                         )
                     }
-                    _historyItems.value = weathers.map {
-                        it.location.name
-                    }
                 }
         }
     }
 
-    fun addNewSearchItem(newItem: String) {
+    fun searchForLocations(input: String) {
         viewModelScope.launch {
+            _searchedLocations.value = searchCityRepository.getCities(input)
+        }
+    }
+
+    fun fetchDataForSelectedLocation(location: SearchedLocation) {
+        viewModelScope.launch {
+            // TODO fetch data for requested location
         }
     }
 }

@@ -3,6 +3,7 @@ package com.antoniok.weather.data_source.remote.api
 import com.antoniok.weather.core.data_source.remote.BuildConfig
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
 import com.antoniok.weather.data_source.remote.model.WeatherDto
+import com.antoniok.weather.data_source.remote.model.location.SearchedLocationDto
 import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import com.antoniok.weather.data_source.remote.resource.networkRequest
 import okhttp3.Call
@@ -19,6 +20,11 @@ private interface WeatherApi {
         @Query("q") city: String,
         @Query("days") days: Int
     ): Response<WeatherDto>
+
+    @GET("search.json")
+    suspend fun getLocation(
+        @Query("q") location: String
+    ): Response<List<SearchedLocationDto>>
 
 }
 
@@ -42,8 +48,19 @@ internal class RetrofitWeatherNetwork(
                 NetworkResource.Success(it)
             },
             onError = {
+                it.printStackTrace()
                 NetworkResource.Error(it)
             }
         )
 
+    override suspend fun getLocations(location: String): NetworkResource<List<SearchedLocationDto>> =
+        networkApi.getLocation(location = location).networkRequest(
+            onSuccess = {
+                NetworkResource.Success(it)
+            },
+            onError = {
+                it.printStackTrace()
+                NetworkResource.Error(it)
+            }
+        )
 }

@@ -9,6 +9,7 @@ import com.antoniok.weather.data_source.remote.model.forecast.DayDto
 import com.antoniok.weather.data_source.remote.model.forecast.ForecastDayDto
 import com.antoniok.weather.data_source.remote.model.forecast.ForecastDto
 import com.antoniok.weather.data_source.remote.model.location.LocationDto
+import com.antoniok.weather.data_source.remote.model.location.SearchedLocationDto
 import com.antoniok.weather.data_source.remote.model.shared.AirQualityDto
 import com.antoniok.weather.data_source.remote.model.shared.ConditionDto
 import com.antoniok.weather.data_source.remote.resource.NetworkResource
@@ -56,6 +57,35 @@ class RetrofitWeatherNetworkTest {
             assert(result is NetworkResource.Error)
             assert((result as NetworkResource.Error).exception.message == "404")
         }
+
+
+    @Test
+    fun `GIVEN a valid location WHEN getLocations is called THEN it returns the location`() =
+        runBlocking {
+            val city = "New York"
+            val dataSourceResponse = NetworkResource.Success(listOf(searchedLocationDto))
+
+            `when`(weatherDataSource.getLocations(city)).thenReturn(dataSourceResponse)
+            val result = weatherDataSource.getLocations(city)
+
+            assert(result is NetworkResource.Success)
+            assert((result as NetworkResource.Success).data == listOf(searchedLocationDto))
+        }
+
+    @Test
+    fun `GIVEN an invalid location WHEN getLocations is called THEN it returns an error`() =
+        runBlocking {
+            val city = ""
+            val exception = Exception("404")
+            val errorResponse = NetworkResource.Error<List<SearchedLocationDto>>(exception)
+
+            `when`(weatherDataSource.getLocations(city)).thenReturn(errorResponse)
+            val result = weatherDataSource.getLocations(city)
+
+            assert(result is NetworkResource.Error)
+            assert((result as NetworkResource.Error).exception.message == "404")
+        }
+
 
     companion object {
         private val conditionDto = ConditionDto(
@@ -186,6 +216,15 @@ class RetrofitWeatherNetworkTest {
                 alerts = alertsDto
             )
         )
-    }
 
+        private val searchedLocationDto = SearchedLocationDto(
+            id = 1,
+            name = "Zagreb",
+            region = "Grad Zagreb",
+            country = "Croatia",
+            lat = 12.2,
+            lon = 123.1,
+            url = "www.croatia.hr"
+        )
+    }
 }

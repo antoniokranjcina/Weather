@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(project(Module.coreModel))
     implementation(project(Module.coreDataSourceLocal))
 
     implementation(Koin.koinAndroid)

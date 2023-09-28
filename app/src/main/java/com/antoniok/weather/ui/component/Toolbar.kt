@@ -1,12 +1,15 @@
 package com.antoniok.weather.ui.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -16,11 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.antoniok.core.model.SearchedLocation
 import com.antoniok.core.ui.icon.WeatherIcon
 import com.antoniok.core.ui.spacing.Spacing
 import kotlinx.coroutines.CoroutineScope
@@ -32,8 +33,9 @@ fun Toolbar(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     openDrawerState: suspend () -> Unit,
-    historyItems: List<String>,
-    addNewItem: (newItem: String) -> Unit
+    searchedLocations: List<SearchedLocation>,
+    searchForLocation: (input: String) -> Unit,
+    selectLocation: (location: SearchedLocation) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
@@ -70,54 +72,59 @@ fun Toolbar(
             )
         }
     )
-    SearchBar(
-        modifier = Modifier.alpha(if (isActive) 1f else 0f),
-        query = text,
-        onQueryChange = { text = it },
-        onSearch = {
-            addNewItem(it)
-            isActive = false
-            text = ""
-        },
-        active = isActive,
-        onActiveChange = { isActive = true },
-        placeholder = {
-            Text(text = "Search")
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = WeatherIcon.Search,
-                contentDescription = null
-            )
-        },
-        trailingIcon = {
-            if (isActive) {
+    if (isActive) {
+        SearchBar(
+            modifier = Modifier,
+            query = text,
+            onQueryChange = { text = it },
+            onSearch = {
+                searchForLocation(it)
+                text = ""
+            },
+            active = true,
+            onActiveChange = { isActive = true },
+            placeholder = {
+                Text(text = "Search")
+            },
+            leadingIcon = {
                 Icon(
-                    modifier = Modifier.clickable {
-                        if (text.isNotEmpty()) {
-                            text = ""
-                        } else {
-                            isActive = false
-                        }
-                    },
-                    imageVector = WeatherIcon.Close,
+                    imageVector = WeatherIcon.Search,
                     contentDescription = null
                 )
+            },
+            trailingIcon = {
+                if (isActive) {
+                    Icon(
+                        modifier = Modifier.clickable {
+                            if (text.isNotEmpty()) {
+                                text = ""
+                            } else {
+                                isActive = false
+                            }
+                        },
+                        imageVector = WeatherIcon.Close,
+                        contentDescription = null
+                    )
+                }
             }
-        }
-    ) {
-        historyItems.forEach {
-            Row(
-                modifier = Modifier.padding(Spacing.m),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    modifier = Modifier.padding(Spacing.m),
-                    painter = painterResource(id = WeatherIcon.History),
-                    contentDescription = null
-                )
-                Text(text = it)
+        ) {
+            LazyColumn {
+                items(searchedLocations) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectLocation(it)
+                                isActive = false
+                            }
+                            .padding(Spacing.l)
+                    ) {
+                        Text(
+                            text = it.name,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
             }
         }
     }
@@ -129,7 +136,8 @@ private fun ToolbarPreview() {
     Toolbar(
         coroutineScope = rememberCoroutineScope(),
         openDrawerState = {},
-        historyItems = listOf("London", "New York", "Zagreb"),
-        addNewItem = {}
+        searchedLocations = emptyList(),
+        searchForLocation = {},
+        selectLocation = {}
     )
 }
