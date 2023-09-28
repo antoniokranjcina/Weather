@@ -31,5 +31,6 @@ dependencies {
     implementation(platform(Compose.BOM))
     implementation(Compose.ui)
     implementation(Compose.uiGraphics)
+    implementation(Compose.material)
 
 }

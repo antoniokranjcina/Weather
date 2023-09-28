@@ -5,19 +5,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,11 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antoniok.core.ui.spacing.Spacing
 import com.antoniok.weather.navigation.RootNavHost
+import com.antoniok.weather.ui.component.Toolbar
 import com.antoniok.weather.ui.theme.WeatherTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootScreen(
     modifier: Modifier = Modifier,
@@ -78,22 +72,14 @@ fun RootScreen(
             Scaffold(
                 modifier = modifier,
                 topBar = {
-                    TopAppBar(
-                        title = {},
-                        navigationIcon = {
-                            IconButton(
-                                onClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                },
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.Menu,
-                                        contentDescription = null
-                                    )
-                                }
-                            )
+                    Toolbar(
+                        coroutineScope = scope,
+                        openDrawerState = {
+                            drawerState.open()
+                        },
+                        historyItems = viewModel.historyItems.collectAsStateWithLifecycle().value,
+                        addNewItem = {
+                            viewModel.addNewSearchItem(it)
                         }
                     )
                 }
