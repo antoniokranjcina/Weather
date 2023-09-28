@@ -30,6 +30,7 @@ fun CurrentWeatherInfo(
     description: String,
     imageCode: Int,
     city: String,
+    country: String,
     feelsLikeTemp: Int
 ) {
     val image = ConditionIcon.findWeatherIcon(imageCode)
@@ -49,6 +50,11 @@ fun CurrentWeatherInfo(
                 contentDescription = null
             )
         }
+        Spacer(modifier = Modifier.size(Spacing.xs))
+        Text(
+            text = country,
+            style = MaterialTheme.typography.bodyLarge
+        )
         Spacer(modifier = Modifier.size(Spacing.l))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -89,6 +95,7 @@ private fun WeatherCardPreview() {
         description = "Rainy",
         imageCode = 0,
         city = "Zagreb",
+        country = "Croatia",
         feelsLikeTemp = 22
     )
 }

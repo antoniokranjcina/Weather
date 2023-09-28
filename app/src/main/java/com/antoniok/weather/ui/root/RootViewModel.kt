@@ -75,7 +75,13 @@ class RootViewModel(
 
     fun fetchDataForSelectedLocation(location: SearchedLocation) {
         viewModelScope.launch {
-            // TODO fetch data for requested location
+            searchCityRepository.saveSelectedCity(
+                city = location.name,
+                update = {
+                    val index = modalNavigationItems.indexOfFirst { it.title == location.name }
+                    modalItemsRepository.saveIndex(index)
+                }
+            )
         }
     }
 }

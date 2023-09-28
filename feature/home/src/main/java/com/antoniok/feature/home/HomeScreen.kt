@@ -62,6 +62,7 @@ private fun HomeScreenContent(
             description = weather.current.condition.text,
             imageCode = weather.current.condition.code,
             city = weather.location.name,
+            country = weather.location.country,
             feelsLikeTemp = weather.current.feelsLikeC.toInt()
         )
         if (weather.hours.isNotEmpty()) {

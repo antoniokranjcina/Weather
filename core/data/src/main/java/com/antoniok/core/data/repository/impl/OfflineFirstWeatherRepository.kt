@@ -1,14 +1,12 @@
 package com.antoniok.core.data.repository.impl
 
 import com.antoniok.core.data.repository.WeatherRepository
+import com.antoniok.core.data.util.getCityFromNetworkAndSaveIt
 import com.antoniok.core.data_source.local.WeatherLocalDataSource
 import com.antoniok.core.data_source.local.database.entity.WeatherWithDaysAndHours
 import com.antoniok.core.data_source.local.database.entity.asExternalModule
 import com.antoniok.core.model.Weather
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
-import com.antoniok.weather.data_source.remote.model.asEntity
-import com.antoniok.weather.data_source.remote.model.forecast.asEntity
-import com.antoniok.weather.data_source.remote.resource.NetworkResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -31,40 +29,21 @@ internal class OfflineFirstWeatherRepository(
         val cities = localDataSource.cities.first()
         return if (cities.isNotEmpty()) {
             cities.forEach {
-                getCityFromNetworkAndSaveIt(city = it, days = days)
+                getCityFromNetworkAndSaveIt(
+                    city = it,
+                    days = days,
+                    networkDataSource = networkDataSource,
+                    localDataSource = localDataSource
+                )
             }
             true
         } else {
-            getCityFromNetworkAndSaveIt(city = city, days = days)
+            getCityFromNetworkAndSaveIt(
+                city = city,
+                days = days,
+                networkDataSource = networkDataSource,
+                localDataSource = localDataSource
+            )
         }
     }
-
-    private suspend fun getCityFromNetworkAndSaveIt(city: String, days: Int): Boolean {
-        val weather = networkDataSource.getWeather(
-            city = city,
-            days = days
-        )
-        return when (weather) {
-            is NetworkResource.Success -> {
-                localDataSource.insertWeather(weather.data.asEntity())
-                localDataSource.insertHours(
-                    weather.data.forecast.forecastDay.first().hour.map {
-                        it.asEntity(weather.data.location.name)
-                    }
-                )
-                localDataSource.insertForecastDays(
-                    weather.data.forecast.forecastDay.map {
-                        it.asEntity(weather.data.location.name)
-                    }
-                )
-                true
-            }
-
-            is NetworkResource.Error -> {
-                weather.exception.printStackTrace()
-                false
-            }
-        }
-    }
-
 }
