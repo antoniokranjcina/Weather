@@ -77,9 +77,12 @@ fun RootScreen(
                         openDrawerState = {
                             drawerState.open()
                         },
-                        historyItems = viewModel.historyItems.collectAsStateWithLifecycle().value,
-                        addNewItem = {
-                            viewModel.addNewSearchItem(it)
+                        searchedLocations = viewModel.searchedLocations.collectAsStateWithLifecycle().value,
+                        searchForLocation = {
+                            viewModel.searchForLocations(it)
+                        },
+                        selectLocation = {
+                            viewModel.fetchDataForSelectedLocation(it)
                         }
                     )
                 }
