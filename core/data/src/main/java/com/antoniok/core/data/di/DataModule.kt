@@ -14,7 +14,7 @@ val dataModule = module {
 
     single { provideWeatherRepository(get(), get()) }
     single { provideModalItemsRepository(get()) }
-    single { provideSearchCityRepository(get()) }
+    single { provideSearchCityRepository(get(), get()) }
 }
 
 private fun provideWeatherRepository(
@@ -32,7 +32,9 @@ private fun provideModalItemsRepository(
 )
 
 private fun provideSearchCityRepository(
-    networkDataSource: WeatherNetworkDataSource
+    networkDataSource: WeatherNetworkDataSource,
+    localDataSource: WeatherLocalDataSource
 ): SearchCityRepository = SearchedCitiesProvider(
-    networkDataSource = networkDataSource
+    networkDataSource = networkDataSource,
+    localDataSource = localDataSource
 )

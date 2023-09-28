@@ -1,6 +1,7 @@
 package com.antoniok.core.data.repository
 
 import com.antoniok.core.data.repository.impl.SearchedCitiesProvider
+import com.antoniok.core.data_source.local.WeatherLocalDataSource
 import com.antoniok.core.model.SearchedLocation
 import com.antoniok.weather.data_source.remote.WeatherNetworkDataSource
 import com.antoniok.weather.data_source.remote.model.location.SearchedLocationDto
@@ -18,12 +19,16 @@ class SearchedCitiesProviderTest {
 
     @Mock
     private lateinit var mockNetworkDataSource: WeatherNetworkDataSource
-    private lateinit var searchedCitiesProvider: SearchCityRepository
+
+    @Mock
+    private lateinit var localDataSource: WeatherLocalDataSource
+
+    private lateinit var searchCityRepository: SearchCityRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        searchedCitiesProvider = SearchedCitiesProvider(mockNetworkDataSource)
+        searchCityRepository = SearchedCitiesProvider(mockNetworkDataSource, localDataSource)
     }
 
     @Test
@@ -34,7 +39,7 @@ class SearchedCitiesProviderTest {
             val successResponse = NetworkResource.Success(expectedLocations)
 
             `when`(mockNetworkDataSource.getLocations(location)).thenReturn(successResponse)
-            val result = searchedCitiesProvider.getCities(location)
+            val result = searchCityRepository.getCities(location)
 
             assertEquals(
                 expectedLocations.map(SearchedLocationDto::asExternalModel),
@@ -48,9 +53,8 @@ class SearchedCitiesProviderTest {
             val location = ""
             val successResponse = NetworkResource.Success(emptyList<SearchedLocationDto>())
 
-            // WHEN
             `when`(mockNetworkDataSource.getLocations(location)).thenReturn(successResponse)
-            val result = searchedCitiesProvider.getCities(location)
+            val result = searchCityRepository.getCities(location)
 
             assertEquals(emptyList<SearchedLocation>(), result)
         }
@@ -63,7 +67,7 @@ class SearchedCitiesProviderTest {
                 NetworkResource.Error<List<SearchedLocationDto>>(Exception("Invalid location"))
 
             `when`(mockNetworkDataSource.getLocations(location)).thenReturn(errorResponse)
-            val result = searchedCitiesProvider.getCities(location)
+            val result = searchCityRepository.getCities(location)
 
             assertEquals(emptyList<SearchedLocation>(), result)
         }
