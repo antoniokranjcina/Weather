@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id(GradlePlugins.androidApplication)
+    id(GradlePlugins.androidKotlin)
 }
 
 android {
-    namespace = "com.antoniok.weather"
-    compileSdk = 33
+    namespace = ProjectConfig.nameSpaceApp
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = "com.antoniok.weather"
-        minSdk = 28
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = ProjectConfig.nameSpaceApp
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
+        versionCode = ProjectConfig.versionCode
+        versionName = ProjectConfig.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,17 +30,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = ProjectConfig.java
+        targetCompatibility = ProjectConfig.java
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = ProjectConfig.targetJDK
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = Compose.composeCompilerVersion
     }
     packaging {
         resources {
@@ -51,19 +51,33 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(project(Module.coreDataSourceRemote))
+    implementation(project(Module.coreDataSourceLocal))
+    implementation(project(Module.coreModel))
+    implementation(project(Module.coreData))
+    implementation(project(Module.coreUi))
+
+    implementation(project(Module.featureHome))
+
+    implementation(AndroidX.coreKtx)
+    implementation(AndroidX.lifecycleRuntime)
+    implementation(AndroidX.lifecycleRuntimeCompose)
+
+    implementation(WorkManager.workManagerRuntime)
+
+    implementation(platform(Compose.BOM))
+    implementation(Compose.ui)
+    implementation(Compose.uiGraphics)
+    implementation(Compose.uiToolingPreview)
+    implementation(Compose.material)
+    implementation(Compose.activity)
+    implementation(Compose.runtime)
+    debugImplementation(Compose.uiTooling)
+    debugImplementation(Compose.uiTestManif)
+
+    implementation(Koin.koinAndroid)
+    implementation(Compose.koinAndroidCompose)
+
+    implementation(Compose.navigationCompose)
+
 }
